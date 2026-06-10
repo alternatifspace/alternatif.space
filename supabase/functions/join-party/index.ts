@@ -20,14 +20,25 @@ Deno.serve(async (req) => {
 
   const { data: party } = await db
     .from('parties')
-    .select('id, status, governance_config')
+    .select('id, status, leader_id, governance_config')
     .eq('id', party_id)
     .maybeSingle();
-  if (!party || !['active', 'dormant'].includes(party.status)) {
-    return json({ error: 'party_not_joinable' }, 404);
-  }
-  if (party.governance_config?.membership_model === 'application') {
-    return json({ error: 'application_required' }, 403);
+  if (!party || party.status === 'dissolved') return json({ error: 'party_not_joinable' }, 404);
+
+  // The founder joins their own party at publish, while it is still
+  // pending_review and regardless of membership model.
+  const isFounder = party.leader_id === userId;
+  if (!isFounder) {
+    if (!['active', 'dormant'].includes(party.status)) {
+      return json({ error: 'party_not_joinable' }, 404);
+    }
+    if (party.governance_config?.membership_model === 'application') {
+      return json({ error: 'application_required' }, 403);
+    }
+    if (party.governance_config?.membership_model === 'invite_only') {
+      // P0-10: invite-only joins go through use-invite-token, never plain join.
+      return json({ error: 'invite_required' }, 403);
+    }
   }
 
   const joinedAt = new Date().toISOString();

@@ -90,66 +90,66 @@
 
 ### Auth & Onboarding
 
-- [ ] **5.1** Sign up / log in page — email + password via Clerk, no social login (P0-01)
-- [ ] **5.2** First-login onboarding screen — platform explanation, must join or create party CTA (P0-01)
-- [ ] **5.3** Auth gate middleware — `hooks.server.ts` protecting member-only routes (TRD §11)
-- [ ] **5.4** `/bergabung` — onboarding gate: redirects users without a party to browse or create party (TRD §11)
+- [x] **5.1** Sign up / log in page — email + password via Clerk, no social login (P0-01)
+- [x] **5.2** First-login onboarding screen — platform explanation, must join or create party CTA (P0-01)
+- [x] **5.3** Auth gate middleware — `hooks.server.ts` protecting member-only routes (TRD §11)
+- [x] **5.4** `/bergabung` — onboarding gate: redirects users without a party to browse or create party (TRD §11)
 
 ### Party Discovery
 
-- [ ] **5.5** `/` — browse parties page: grid of party cards, default sort by recent activity (P0-03)
-- [ ] **5.6** Party card component — logo, name, tagline, membership model, activity status, member count; dormant badge (P0-03)
-- [ ] **5.7** Browse filters — membership model (open / application / invite-only), activity status (active / dormant) (P0-03)
-- [ ] **5.8** Search by party name (P0-03)
-- [ ] **5.9** Dormant party visual badge (30+ days inactive leader) (P0-03)
-- [ ] **5.10** Dissolved parties — visible but marked, hidden by default with toggle (P0-03)
+- [x] **5.5** `/` — browse parties page: grid of party cards, default sort by recent activity (P0-03)
+- [x] **5.6** Party card component — logo, name, tagline, membership model, activity status, member count; dormant badge (P0-03)
+- [x] **5.7** Browse filters — membership model (open / application / invite-only), activity status (active / dormant) (P0-03)
+- [x] **5.8** Search by party name (P0-03)
+- [x] **5.9** Dormant party visual badge (30+ days inactive leader) (P0-03)
+- [x] **5.10** Dissolved parties — visible but marked, hidden by default with toggle (P0-03)
 
 ### Party Profile
 
-- [ ] **5.11** `/partai/[slug]` — party public profile page (P0-04)
-- [ ] **5.12** Hero section — logo, name, tagline, status pills (activity status, membership model) (P0-04)
-- [ ] **5.13** Full manifesto — rendered TipTap HTML, read-only (P0-04)
-- [ ] **5.14** Current stance — short live status set by leader (P0-04)
-- [ ] **5.15** Governance config display — all raw parameter values visible, no archetype label (P0-04)
-- [ ] **5.16** Member count + leader display name + leader last active indicator (P0-04)
-- [ ] **5.17** Join / Apply / Request Invite CTA — depends on membership model (P0-04)
-- [ ] **5.18** `/partai/[slug]/anggota` — current member list (display names only) (TRD §11)
-- [ ] **5.19** OG meta tags per party — `og:title`, `og:description`, `og:image` using share card (P0-13)
+- [x] **5.11** `/partai/[slug]` — party public profile page (P0-04)
+- [x] **5.12** Hero section — logo, name, tagline, status pills (activity status, membership model) (P0-04)
+- [x] **5.13** Full manifesto — rendered TipTap HTML, read-only (P0-04)
+- [x] **5.14** Current stance — short live status set by leader (P0-04)
+- [x] **5.15** Governance config display — all raw parameter values visible, no archetype label (P0-04)
+- [x] **5.16** Member count + leader display name + leader last active indicator (P0-04)
+- [x] **5.17** Join / Apply / Request Invite CTA — depends on membership model (P0-04)
+- [x] **5.18** `/partai/[slug]/anggota` — current member list (display names only) (TRD §11)
+- [x] **5.19** OG meta tags per party — `og:title`, `og:description`, `og:image` using share card (P0-13)
 
 ### Create Party Flow (5-step wizard)
 
-- [ ] **5.20** `/buat-partai` — multi-step flow, local store holds state until publish (TRD §11)
-- [ ] **5.21** Step 1 — Select starting point: Vanguard, Republic, Commune, Custom (P0-05)
-- [ ] **5.22** Step 2 — Governance parameters: pre-filled (preset paths) or blank (Custom path) (P0-05)
-- [ ] **5.23** Step 2 — Custom path: CTA disabled until all params set, completion counter ("X dari Y parameter belum diatur") (P0-05)
-- [ ] **5.24** Step 3 — Party identity: name, logo upload (JPG/PNG/WebP, max 2MB, square crop), tagline, manifesto editor (TipTap) (P0-05)
-- [ ] **5.25** Step 4 — Enable council toggle (optional, Phase 2 execution) (P0-05)
-- [ ] **5.26** Step 5 — Review & publish: all settings displayed, config permanently locked on publish, honeymoon starts (`now() + 3 months`) (P0-05)
-- [ ] **5.27** Manifesto editor — TipTap: H2/H3, bold, italic, bullet, numbered, blockquote; no image embeds; 200-char minimum; auto-save draft (P0-06)
-- [ ] **5.28** Logo upload — Supabase Storage (`party-logos/{party_id}/logo.{ext}`), client-side canvas crop to square (P0-07, TRD §13)
-- [ ] **5.29** Archetype label — never stored in DB, never returned by API, never shown publicly (P0-05, Q7)
+- [x] **5.20** `/buat-partai` — multi-step flow, local store holds state until publish (TRD §11)
+- [x] **5.21** Step 1 — Select starting point: Vanguard, Republic, Commune, Custom (P0-05)
+- [x] **5.22** Step 2 — Governance parameters: pre-filled (preset paths) or blank (Custom path) (P0-05)
+- [x] **5.23** Step 2 — Custom path: CTA disabled until all params set, completion counter ("X dari Y parameter belum diatur") (P0-05)
+- [x] **5.24** Step 3 — Party identity: name, logo upload (JPG/PNG/WebP, max 2MB, square crop), tagline, manifesto editor (TipTap) (P0-05)
+- [x] **5.25** Step 4 — Enable council toggle (optional, Phase 2 execution) (P0-05)
+- [x] **5.26** Step 5 — Review & publish: all settings displayed, config permanently locked on publish, honeymoon starts (`now() + 3 months`) (P0-05)
+- [x] **5.27** Manifesto editor — TipTap: H2/H3, bold, italic, bullet, numbered, blockquote; no image embeds; 200-char minimum; auto-save draft (P0-06)
+- [x] **5.28** Logo upload — Supabase Storage (`party-logos/{party_id}/logo.{ext}`), client-side canvas crop to square (P0-07, TRD §13)
+- [x] **5.29** Archetype label — never stored in DB, never returned by API, never shown publicly (P0-05, Q7)
 
 ### Joining & Membership
 
-- [ ] **5.30** Open join — single CTA, instant join, confirmation screen with party flag message (P0-08)
-- [ ] **5.31** Already-in-party gate — prompt to leave current party first, with profile-history warning (P0-08)
-- [ ] **5.32** Application join — 500-char free text, submit via `submit-application` edge function (P0-09)
-- [ ] **5.33** Invite-only join — members generate invite link (single-use, 7-day expiry) via `generate-invite-token` (P0-10)
-- [ ] **5.34** Invite redemption — `/partai/[slug]?invite=TOKEN`, validate via `use-invite-token` (P0-10)
-- [ ] **5.35** Leave party — available from profile or party page, confirmation dialog with history warning (P0-11)
-- [ ] **5.36** Party membership flag — query `party_members WHERE user_id = auth.uid() AND status = 'active' LIMIT 1` (TRD §5)
+- [x] **5.30** Open join — single CTA, instant join, confirmation screen with party flag message (P0-08)
+- [x] **5.31** Already-in-party gate — prompt to leave current party first, with profile-history warning (P0-08)
+- [x] **5.32** Application join — 500-char free text, submit via `submit-application` edge function (P0-09)
+- [x] **5.33** Invite-only join — members generate invite link (single-use, 7-day expiry) via `generate-invite-token` (P0-10)
+- [x] **5.34** Invite redemption — `/partai/[slug]?invite=TOKEN`, validate via `use-invite-token` (P0-10)
+- [x] **5.35** Leave party — available from profile or party page, confirmation dialog with history warning (P0-11)
+- [x] **5.36** Party membership flag — query `party_members WHERE user_id = auth.uid() AND status = 'active' LIMIT 1` (TRD §5)
 
 ### Post-Join & Post-Approval Flows
 
-- [ ] **5.37** Post-join nudge screen — full-screen: "Bendera kamu sudah terpasang. Sekarang bawa posisimu ke diskusi." → CTA to mufakat (P0-12)
-- [ ] **5.38** Post-approval share flow — pre-composed share card (logo + name + tagline + branding), Web Share API trigger (P0-13)
-- [ ] **5.39** Share card fallback — copy link button for browsers without Web Share API (P0-13)
+- [x] **5.37** Post-join nudge screen — full-screen: "Bendera kamu sudah terpasang. Sekarang bawa posisimu ke diskusi." → CTA to mufakat (P0-12)
+- [x] **5.38** Post-approval share flow — pre-composed share card (logo + name + tagline + branding), Web Share API trigger (P0-13)
+- [x] **5.39** Share card fallback — copy link button for browsers without Web Share API (P0-13)
 - [ ] **5.40** Share card generation — Edge Function creates OG image at party approval, stored in Supabase Storage (`party-share-cards/{party_id}/share.png`) (P0-13, TRD §13)
 
 ### User Profile
 
-- [ ] **5.41** `/profil/[username]` — user profile page: display name, bio (max 160 chars), party badge, party history log (P0-02)
-- [ ] **5.42** Party history log — list of past parties with dates, read from `party_membership_history` (P0-02)
+- [x] **5.41** `/profil/[username]` — user profile page: display name, bio (max 160 chars), party badge, party history log (P0-02) — implemented as `/profil/[id]`: the schema has no username column and display_name is not unique (TRD gap)
+- [x] **5.42** Party history log — list of past parties with dates, read from `party_membership_history` (P0-02)
 
 ---
 
