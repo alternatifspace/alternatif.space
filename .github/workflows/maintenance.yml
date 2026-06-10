@@ -1,0 +1,29 @@
+# All scheduled jobs live in this one workflow (TRD §10).
+# Requires repo secrets: SUPABASE_FUNCTIONS_URL, SUPABASE_SERVICE_KEY (checklist 7.4).
+# Phase 1 adds the close-expired-proposals job on the */15 schedule.
+name: maintenance
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # every 15 minutes — OP-window expiry
+    - cron: '0 0 * * *' # daily — dormant status update
+  workflow_dispatch:
+
+jobs:
+  expire-op-windows: # Phase 0 (mufakat, M0-09)
+    if: github.event.schedule == '*/15 * * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl --fail-with-body -X POST \
+            ${{ secrets.SUPABASE_FUNCTIONS_URL }}/expire-op-windows \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}"
+
+  update-dormant-status: # Phase 0 (partai, TRD §8)
+    if: github.event.schedule == '0 0 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl --fail-with-body -X POST \
+            ${{ secrets.SUPABASE_FUNCTIONS_URL }}/update-dormant-status \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}"

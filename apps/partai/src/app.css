@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+/* Tailwind v4 does not scan symlinked workspace packages by default —
+   register the shared component library as a source. */
+@source '../../../packages/ui/src';
+
+/* Mobile-first baseline (TRD §14): 16px minimum base font. */
+html {
+	font-size: 16px;
+}
