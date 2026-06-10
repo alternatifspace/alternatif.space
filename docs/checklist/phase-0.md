@@ -8,31 +8,31 @@
 
 ## 1. Infrastructure & Configuration
 
-- [ ] **1.1** Workspace wiring — app-level `package.json` files for `apps/partai`, `apps/mufakat`, `packages/ui` with correct dependencies (TRD §3)
-- [ ] **1.2** SvelteKit scaffold — `svelte.config.js`, `vite.config.ts`, `tsconfig.json` per app (TRD §11)
-- [ ] **1.3** Tailwind CSS configuration per app (TRD §2)
-- [ ] **1.4** Clerk auth integration — shared init, ClerkProvider, JWT template for Supabase (`sub` mapped to user UUID) (TRD §5)
-- [ ] **1.5** Supabase client init — `@supabase/ssr` with Clerk JWT, per-app setup (TRD §5)
-- [ ] **1.6** Environment variables — `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` per app (TRD §4)
-- [ ] **1.7** Cloudflare Pages adapter — `@sveltejs/adapter-cloudflare` configured for `partai` and `mufakat` (TRD §4)
-- [ ] **1.8** Cross-subdomain SSO — cookie domain scoped to `.alternatif.space`, verified working between partai and mufakat (TRD §5)
-- [ ] **1.9** `packages/ui` package config — `package.json`, exports map, build setup (TRD §3)
+- [x] **1.1** Workspace wiring — app-level `package.json` files for `apps/partai`, `apps/mufakat`, `packages/ui` with correct dependencies (TRD §3)
+- [x] **1.2** SvelteKit scaffold — `svelte.config.js`, `vite.config.ts`, `tsconfig.json` per app (TRD §11)
+- [x] **1.3** Tailwind CSS configuration per app (TRD §2) — v4 CSS-first config via `@tailwindcss/vite`, no `tailwind.config.js` needed
+- [x] **1.4** Clerk auth integration — shared init, ClerkProvider, JWT template for Supabase (`sub` mapped to user UUID) (TRD §5) — code via `svelte-clerk` (`withClerkHandler` + `ClerkProvider`); the `supabase` JWT template itself is Clerk-dashboard config (see `.env.example`)
+- [x] **1.5** Supabase client init — `@supabase/ssr` with Clerk JWT, per-app setup (TRD §5) — `src/lib/supabase.ts` per app, `accessToken` callback presents the Clerk token
+- [x] **1.6** Environment variables — `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` per app (TRD §4)
+- [x] **1.7** Cloudflare Pages adapter — `@sveltejs/adapter-cloudflare` configured for `partai` and `mufakat` (TRD §4) — `pnpm build` verified
+- [ ] **1.8** Cross-subdomain SSO — cookie domain scoped to `.alternatif.space`, verified working between partai and mufakat (TRD §5) — requires Clerk production instance on the root domain + both subdomains deployed; cannot be verified locally
+- [x] **1.9** `packages/ui` package config — `package.json`, exports map, build setup (TRD §3) — consumed as raw Svelte source via workspace, no build step
 
 ---
 
 ## 2. Shared UI Components (`packages/ui`)
 
-- [ ] **2.1** `PartyBadge.svelte` — party logo + name, link to party profile on partai (TRD §3, M0-06)
-- [ ] **2.2** `MemberAvatar.svelte` — user display component (TRD §3)
-- [ ] **2.3** `VoteWidget.svelte` — voting UI stub (Phase 1 use, scaffold now) (TRD §3)
-- [ ] **2.4** `NotificationBell.svelte` — in-app notification bell, unread count badge (TRD §3, §12)
-- [ ] **2.5** `ThreadStatusBadge.svelte` — mufakat status pill: `aktif` / `selesai` / `pertanyaan_terbuka` / `dialihkan` (TRD §3, §11)
-- [ ] **2.6** `SplitPlaceholderCard.svelte` — compact card for moved comment scars: 2-line excerpt + link + live status badge + reaction count (TRD §3, §11, M0-10)
+- [x] **2.1** `PartyBadge.svelte` — party logo + name, link to party profile on partai (TRD §3, M0-06) — `party = null` renders nothing (flagless muted-member state)
+- [x] **2.2** `MemberAvatar.svelte` — user display component (TRD §3)
+- [x] **2.3** `VoteWidget.svelte` — voting UI stub (Phase 1 use, scaffold now) (TRD §3)
+- [x] **2.4** `NotificationBell.svelte` — in-app notification bell, unread count badge (TRD §3, §12)
+- [x] **2.5** `ThreadStatusBadge.svelte` — mufakat status pill: `aktif` / `selesai` / `pertanyaan_terbuka` / `dialihkan` (TRD §3, §11)
+- [x] **2.6** `SplitPlaceholderCard.svelte` — compact card for moved comment scars: 2-line excerpt + link + live status badge + reaction count (TRD §3, §11, M0-10)
 
 ### Shared Stores (`packages/ui/stores/`)
 
-- [ ] **2.7** `currentUser.js` — Svelte writable store: `{ id, display_name, bio, last_active_at }`, populated on Clerk session resolve (TRD §11)
-- [ ] **2.8** `currentParty.js` — Svelte writable store: `{ id, slug, name, logo_url, status, role: 'leader' | 'member' }` (TRD §11)
+- [x] **2.7** `currentUser.js` — Svelte writable store: `{ id, display_name, bio, last_active_at }`, populated on Clerk session resolve (TRD §11)
+- [x] **2.8** `currentParty.js` — Svelte writable store: `{ id, slug, name, logo_url, status, role: 'leader' | 'member' }` (TRD §11)
 
 ---
 
@@ -64,19 +64,19 @@
 - [x] **4.6** `review-application` — leader approve/reject, triggers join on approval, sends notification (TRD §10)
 - [x] **4.7** `update-dormant-status` — daily cron target, flips parties past 30-day leader inactivity (TRD §10)
 
-### Mufakat — Phase 0 *(partially complete)*
+### Mufakat — Phase 0 *(already complete)*
 
 - [x] **4.8** `mufakat-create-thread` — rate-limit check, membership gate, slug generation, TipTap-to-text extraction (TRD §10, M0-01,M0-17)
 - [x] **4.9** `mufakat-create-comment` — rate-limit check, thread `aktif` check, depth enforcement (max 3), scar-redirect rejection (TRD §10, M0-05)
 - [x] **4.10** `mufakat-react` — inserts reaction; on `pertanyaan_bagus`: evaluates split threshold, executes good-question split (TRD §10, M0-08—M0-11)
-- [ ] **4.11** `mufakat-respond-opship` — author confirms or declines OP-ship within 24h window (TRD §10, M0-09)
-- [ ] **4.12** `expire-op-windows` — cron: auto-confirms pending splits past `op_window_ends_at` (TRD §10, M0-09)
-- [ ] **4.13** `mufakat-admin-spinoff` — admin-only: select reply chain, dedup check, move replies, create marker, log (TRD §10, M0-13)
-- [ ] **4.14** `mufakat-confirm-dedup-reference` — admin confirms or rejects pending dedup reference split (TRD §10, M0-09)
-- [ ] **4.15** `mufakat-close-thread` — OP/admin sets `selesai` (with closing summary) or `pertanyaan_terbuka` (TRD §10, M0-03)
-- [ ] **4.16** `mufakat-merge-threads` — admin closes duplicate: status `dialihkan`, `redirect_to` set, optional comment move (TRD §10, M0-02)
-- [ ] **4.17** `mufakat-report-content` — report intake: category + note, confirmation copy explains legal basis (TRD §10, M0-16)
-- [ ] **4.18** `mufakat-review-report` — admin: dismiss / hide (sets `state='hidden'`) / escalate, writes moderation log (TRD §10, M0-16)
+- [x] **4.11** `mufakat-respond-opship` — author confirms or declines OP-ship within 24h window (TRD §10, M0-09)
+- [x] **4.12** `expire-op-windows` — cron: auto-confirms pending splits past `op_window_ends_at` (TRD §10, M0-09)
+- [x] **4.13** `mufakat-admin-spinoff` — admin-only: select reply chain, dedup check, move replies, create marker, log (TRD §10, M0-13)
+- [x] **4.14** `mufakat-confirm-dedup-reference` — admin confirms or rejects pending dedup reference split (TRD §10, M0-09)
+- [x] **4.15** `mufakat-close-thread` — OP/admin sets `selesai` (with closing summary) or `pertanyaan_terbuka` (TRD §10, M0-03)
+- [x] **4.16** `mufakat-merge-threads` — admin closes duplicate: status `dialihkan`, `redirect_to` set, optional comment move (TRD §10, M0-02)
+- [x] **4.17** `mufakat-report-content` — report intake: category + note, confirmation copy explains legal basis (TRD §10, M0-16)
+- [x] **4.18** `mufakat-review-report` — admin: dismiss / hide (sets `state='hidden'`; threads use `hidden` flag via `00006_mufakat_thread_hide.sql`) / escalate, writes moderation log (TRD §10, M0-16)
 
 ### Shared Modules *(already complete)*
 
@@ -229,9 +229,9 @@
 
 ## 7. GitHub Actions
 
-- [ ] **7.1** `maintenance.yml` workflow — file created (TRD §10)
-- [ ] **7.2** `expire-op-windows` cron — every 15 minutes via `curl` to Supabase Edge Function (TRD §10)
-- [ ] **7.3** `update-dormant-status` cron — daily at midnight via `curl` to Supabase Edge Function (TRD §10)
+- [x] **7.1** `maintenance.yml` workflow — file created (TRD §10) — jobs guarded per schedule (`if: github.event.schedule`), `workflow_dispatch` added for manual runs
+- [x] **7.2** `expire-op-windows` cron — every 15 minutes via `curl` to Supabase Edge Function (TRD §10)
+- [x] **7.3** `update-dormant-status` cron — daily at midnight via `curl` to Supabase Edge Function (TRD §10)
 - [ ] **7.4** `SUPABASE_FUNCTIONS_URL` and `SUPABASE_SERVICE_KEY` secrets configured in repo (TRD §10)
 
 ---

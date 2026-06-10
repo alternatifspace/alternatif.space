@@ -110,9 +110,35 @@ function recomputeDepths(moved: Map<string, string | null>): Map<string, number>
 }
 
 /**
+ * Move an admin-selected set of comments into another thread (TRD §9.3 step 2).
+ * Comments whose parent is outside the set become top-level; depths recomputed.
+ * D0: comments MOVE entirely — no per-comment scar (the marker is the scar).
+ */
+export async function moveCommentSet(
+  db: SupabaseClient,
+  comments: Array<{ id: string; parent_id: string | null }>,
+  targetThreadId: string,
+): Promise<void> {
+  const ids = new Set(comments.map((c) => c.id));
+  const moved = new Map<string, string | null>();
+  for (const c of comments) {
+    moved.set(c.id, c.parent_id && ids.has(c.parent_id) ? c.parent_id : null);
+  }
+  const depths = recomputeDepths(moved);
+  for (const [id, newParent] of moved) {
+    await db
+      .from('mufakat_comments')
+      .update({ thread_id: targetThreadId, parent_id: newParent, depth: depths.get(id) ?? 0 })
+      .eq('id', id);
+  }
+}
+
+/**
  * Good-question split execution (TRD §9.2, M0-09/10/11).
  * D0: "Move, leave a scar" — replies MOVE, the seed row is frozen as the scar.
  * Returns the new thread id, or the dedup-pending split id if a candidate exists.
+ * skipDedup: set when an admin has already rejected the dedup candidate
+ * (§9.2 step 1 "On reject: proceed to step 2").
  */
 export async function executeGoodQuestionSplit(
   db: SupabaseClient,
@@ -126,11 +152,14 @@ export async function executeGoodQuestionSplit(
     body_text: string | null;
   },
   snapshot: { reactions: number; participants: number; threshold: number },
+  opts: { skipDedup?: boolean } = {},
 ): Promise<{ outcome: 'dedup_pending' | 'split'; thread_id?: string; split_id: string }> {
   const bodyText = comment.body_text ?? '';
 
   // Step 1 — dedup check: an existing canonical thread for this question?
-  const { data: candidates } = await db.rpc('search_similar_threads', { q: bodyText.slice(0, 200) });
+  const { data: candidates } = opts.skipDedup
+    ? { data: [] }
+    : await db.rpc('search_similar_threads', { q: bodyText.slice(0, 200) });
   const candidate = (candidates ?? []).find(
     (c: { id: string; sim: number }) => c.sim > 0.5 && c.id !== comment.thread_id,
   );
