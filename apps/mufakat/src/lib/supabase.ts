@@ -32,3 +32,8 @@ export function supabaseBrowser(getToken: () => Promise<string | null>): Supabas
 		accessToken: async () => (await getToken()) ?? ''
 	});
 }
+
+/** Anonymous browser client for public reads (e.g. the dedup RPC on /buat). */
+export function supabaseAnon(): SupabaseClient {
+	return createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+}
