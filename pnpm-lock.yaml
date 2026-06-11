@@ -17,9 +17,6 @@ importers:
       '@alternatif/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@supabase/ssr':
-        specifier: ^0.12.0
-        version: 0.12.0(@supabase/supabase-js@2.108.1)
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.108.1
@@ -75,9 +72,6 @@ importers:
       '@alternatif/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@supabase/ssr':
-        specifier: ^0.12.0
-        version: 0.12.0(@supabase/supabase-js@2.108.1)
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.108.1
@@ -1034,11 +1028,6 @@ packages:
   '@supabase/realtime-js@2.108.1':
     resolution: {integrity: sha512-mHGGqOjwd1XTydcoffUqEMsbFQHUi6A3uhQ0EXr3iqzpLqItxKA9nbN6gIQxrZ7JRRnuUe/iOFPUkYV9Tdc5lg==}
     engines: {node: '>=20.0.0'}
-
-  '@supabase/ssr@0.12.0':
-    resolution: {integrity: sha512-d9XV5XzJvzzZbeAIM7fWTCUYxQJZ2Ru6ny3dJHmHGp/LIrJ+o9FpD7N9Rf/UhhWEvHXSoDe8SI32Z2ouOdMjBg==}
-    peerDependencies:
-      '@supabase/supabase-js': ^2.108.0
 
   '@supabase/storage-js@2.108.1':
     resolution: {integrity: sha512-Er0SGGt85iT6ye+SSh98Az6L2CesoZJuyzEZYH2oBOAnIxa9Nn4CtwUC3veGxYggoT56X+3tVuuQeDBP8kR8sg==}
@@ -2421,11 +2410,6 @@ snapshots:
     dependencies:
       '@supabase/phoenix': 0.4.2
       tslib: 2.8.1
-
-  '@supabase/ssr@0.12.0(@supabase/supabase-js@2.108.1)':
-    dependencies:
-      '@supabase/supabase-js': 2.108.1
-      cookie: 1.1.1
 
   '@supabase/storage-js@2.108.1':
     dependencies:

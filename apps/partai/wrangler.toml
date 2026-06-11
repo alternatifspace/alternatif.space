@@ -11,4 +11,4 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 PUBLIC_SUPABASE_URL = "https://lxvpnlvvffehngonqijg.supabase.co"
 PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_9tYgnjBNW4eLBfaVe91qDA_IRhCDVkW"
-PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_c29jaWFsLWxlZWNoLTYyLmNsZXJrLmFjY291bnRzLmRldiQ"
+PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYWx0ZXJuYXRpZi5zcGFjZSQ"
