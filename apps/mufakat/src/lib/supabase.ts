@@ -1,25 +1,27 @@
-import { createBrowserClient, createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { RequestEvent } from '@sveltejs/kit';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
 // Supabase carries no auth state of its own here: every request presents the
-// Clerk-issued JWT (template 'supabase', sub = user UUID — TRD §5) and RLS
-// resolves auth.uid() from it. Writes that touch multiple tables go through
+// Clerk-issued JWT (template 'supabase', sub = Clerk user id — TRD §5) and RLS
+// resolves clerk_uid() from it. Writes that touch multiple tables go through
 // Edge Functions, never these clients (TRD §9, §10).
+//
+// Plain createClient + accessToken (the documented Clerk pattern). Not
+// @supabase/ssr: its createServerClient/createBrowserClient manage Supabase
+// Auth sessions internally, which supabase-js forbids combining with the
+// accessToken option ("accessing supabase.auth.onAuthStateChange is not
+// possible"). Clerk owns the session; Supabase never sets cookies.
+
+const NO_AUTH = { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false };
 
 /** Server-side client for load functions and form actions. */
 export function supabaseServer(event: RequestEvent): SupabaseClient {
-	return createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-		cookies: {
-			getAll: () => event.cookies.getAll(),
-			setAll: (cookies) =>
-				cookies.forEach(({ name, value, options }) =>
-					event.cookies.set(name, value, { ...options, path: options?.path ?? '/' })
-				)
-		},
-		accessToken: async () =>
-			(await event.locals.auth().getToken({ template: 'supabase' })) ?? ''
+	return createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+		auth: NO_AUTH,
+		// null falls back to the anon key (public reads for signed-out visitors).
+		accessToken: async () => (await event.locals.auth().getToken({ template: 'supabase' })) ?? null
 	});
 }
 
@@ -28,12 +30,13 @@ export function supabaseServer(event: RequestEvent): SupabaseClient {
  * (e.g. `session.getToken({ template: 'supabase' })`).
  */
 export function supabaseBrowser(getToken: () => Promise<string | null>): SupabaseClient {
-	return createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-		accessToken: async () => (await getToken()) ?? ''
+	return createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+		auth: NO_AUTH,
+		accessToken: async () => (await getToken()) ?? null
 	});
 }
 
 /** Anonymous browser client for public reads (e.g. the dedup RPC on /buat). */
 export function supabaseAnon(): SupabaseClient {
-	return createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+	return createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, { auth: NO_AUTH });
 }
