@@ -4,3 +4,11 @@ name = "mufakat-alternatif-space"
 pages_build_output_dir = ".svelte-kit/cloudflare"
 compatibility_date = "2026-06-11"
 compatibility_flags = ["nodejs_compat"]
+
+# With a wrangler config present, Pages sources build/runtime vars from here —
+# dashboard plaintext vars are not injected into builds. Public values only;
+# CLERK_SECRET_KEY remains a dashboard Secret (secrets always persist).
+[vars]
+PUBLIC_SUPABASE_URL = "https://lxvpnlvvffehngonqijg.supabase.co"
+PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_9tYgnjBNW4eLBfaVe91qDA_IRhCDVkW"
+PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_c29jaWFsLWxlZWNoLTYyLmNsZXJrLmFjY291bnRzLmRldiQ"
