@@ -19,6 +19,9 @@
 		ondone?: () => void;
 	} = $props();
 
+	// Deliberate initial-value capture: when the user submits without typing,
+	// the unedited content is what must be sent (edit flow).
+	// svelte-ignore state_referenced_locally
 	let json = $state<unknown>(initial);
 	let html = $state('');
 	let text = $state('');

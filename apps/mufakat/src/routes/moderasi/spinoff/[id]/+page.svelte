@@ -6,6 +6,9 @@
 
 	let { data, form } = $props();
 
+	// Deliberate initial-value capture: ?dari= descendants seed the selection
+	// once; after that the admin's checkbox choices own the state.
+	// svelte-ignore state_referenced_locally
 	let selected = $state(new Set(data.rows.filter((r) => r.inChain).map((r) => r.id)));
 	let label = $state('');
 	let title = $state('');

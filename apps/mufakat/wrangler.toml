@@ -1,0 +1,6 @@
+# Cloudflare Pages config (read at build time — supersedes dashboard runtime settings).
+# nodejs_compat is required: Clerk's server SDK imports node:crypto / node:async_hooks.
+name = "mufakat-alternatif-space"
+pages_build_output_dir = ".svelte-kit/cloudflare"
+compatibility_date = "2026-06-11"
+compatibility_flags = ["nodejs_compat"]

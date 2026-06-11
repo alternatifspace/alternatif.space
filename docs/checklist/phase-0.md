@@ -235,14 +235,14 @@
 - [x] **7.1** `maintenance.yml` workflow — file created with `schedule` + `workflow_dispatch` triggers (TRD §10)
 - [x] **7.2** `expire-op-windows` cron — every 15 minutes via `curl` to Supabase Edge Function (TRD §10)
 - [x] **7.3** `update-dormant-status` cron — daily at midnight via `curl` to Supabase Edge Function (TRD §10)
-- [ ] **7.4** `SUPABASE_FUNCTIONS_URL` and `SUPABASE_SERVICE_KEY` secrets configured in repo (TRD §10)
+- [x] **7.4** `SUPABASE_FUNCTIONS_URL` and `SUPABASE_SERVICE_KEY` secrets configured in repo (TRD §10) — points at production project `lxvpnlvvffehngonqijg` (Singapore); workflow sends both `Authorization: Bearer` and `apikey` headers so the new `sb_secret_…` key format works
 
 ---
 
 ## 8. Content Moderation (Process)
 
-- [ ] **8.1** Party creation review queue — Supabase dashboard view filtered on `parties.status = 'pending_review'`. Schema + RLS support it; dashboard view must be configured manually in Supabase. (TRD §15)
-- [ ] **8.2** Party approval flow — moderator reviews name, tagline, manifesto; target review time 24h. Requires setting `status = 'active'` from dashboard. (TRD §15)
+- [x] **8.1** Party creation review queue — saved SQL snippet "Party review queue (8.1/8.2)" in the production project's SQL Editor lists `parties.status = 'pending_review'` (TRD §15)
+- [x] **8.2** Party approval flow — approve/reject statements documented in the same snippet (`status = 'active'` / `status = 'dissolved'`); target review time 24h is an operational practice (TRD §15)
 - [x] **8.3** Mufakat post-moderation — threads/comments publish immediately, no pre-approval queue (TRD §15)
 
 ---
