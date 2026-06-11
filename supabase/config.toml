@@ -1,0 +1,8 @@
+# Local development config (supabase CLI). Production third-party auth is
+# configured in the dashboard; this mirrors it for `supabase start` so local
+# Supabase accepts Clerk dev-instance JWTs (TRD §5, migration 00009).
+project_id = "alternatif-space"
+
+[auth.third_party.clerk]
+enabled = true
+domain = "social-leech-62.clerk.accounts.dev"

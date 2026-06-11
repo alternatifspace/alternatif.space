@@ -52,6 +52,7 @@
 - [x] **3.12** Thread-level hide — `mufakat_threads.hidden` column + updated `search_similar_threads` RPC to exclude hidden threads (`00006_mufakat_thread_hide.sql`)
 - [x] **3.13** Partai Phase 0 schema gaps — `pending_review` party status, `users_self_insert` RLS, storage buckets + policies (`00007_partai_phase0_gaps.sql`)
 - [x] **3.14** Mufakat RLS gaps — author soft-delete policy, admin semantic-flag update policy (`00008_mufakat_rls_gaps.sql`)
+- [x] **3.15** Clerk text user IDs — Clerk reserves JWT `sub` (always `user_…`, never a UUID), so all user-id columns converted uuid→text and every policy moved from `auth.uid()` to `clerk_uid()` = `auth.jwt()->>'sub'` (`00009_clerk_text_user_ids.sql`; updates TRD §5)
 
 ---
 
