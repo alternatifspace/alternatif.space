@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Mobile-first baseline (TRD §14): 16px minimum base font. */
+html {
+	font-size: 16px;
+}

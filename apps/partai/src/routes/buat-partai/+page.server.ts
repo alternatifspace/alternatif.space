@@ -7,6 +7,7 @@ import type { GovernanceConfig } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
 
 const HONEYMOON_MONTHS = 3;
+const MANIFESTO_MIN_WORDS = 50;
 
 export const load: PageServerLoad = async ({ parent }) => {
 	// One party at a time — members cannot found a second party (5.31).
@@ -40,8 +41,9 @@ export const actions: Actions = {
 
 		if (!name) return fail(400, { error: 'Nama partai wajib diisi.' });
 		if (name.length > 80) return fail(400, { error: 'Nama partai maksimal 80 karakter.' });
-		if (manifestoText.length < 200) {
-			return fail(400, { error: 'Manifesto minimal 200 karakter.' });
+		const wordCount = manifestoText.split(/\s+/).filter(Boolean).length;
+		if (wordCount < MANIFESTO_MIN_WORDS) {
+			return fail(400, { error: `Manifesto minimal ${MANIFESTO_MIN_WORDS} kata.` });
 		}
 		if (!validateConfig(config)) {
 			return fail(400, { error: 'Parameter tata kelola belum lengkap atau di luar rentang.' });
@@ -51,22 +53,38 @@ export const actions: Actions = {
 		const honeymoonEndsAt = new Date();
 		honeymoonEndsAt.setMonth(honeymoonEndsAt.getMonth() + HONEYMOON_MONTHS);
 
-		const { data: party, error: insertErr } = await db
+		const row = {
+			slug: slugify(name),
+			name,
+			tagline: tagline || null,
+			manifesto_content: manifesto,
+			manifesto_html: manifestoHtml,
+			governance_config: config, // locked — never updated after this
+			council_enabled: councilEnabled,
+			honeymoon_ends_at: honeymoonEndsAt.toISOString()
+		};
+
+		// A pending_review party led by this user means a previous publish got
+		// the row in but failed before founder membership — reuse it instead of
+		// stranding it behind the slug unique constraint.
+		const { data: stranded } = await db
 			.from('parties')
-			.insert({
-				slug: slugify(name),
-				name,
-				tagline: tagline || null,
-				manifesto_content: manifesto,
-				manifesto_html: manifestoHtml,
-				status: 'pending_review', // moderation queue (TRD §15)
-				governance_config: config, // locked — never updated after this
-				council_enabled: councilEnabled,
-				honeymoon_ends_at: honeymoonEndsAt.toISOString(),
-				leader_id: userId
-			})
-			.select('id, slug')
-			.single();
+			.select('id')
+			.eq('leader_id', userId)
+			.eq('status', 'pending_review')
+			.maybeSingle();
+
+		const { data: party, error: insertErr } = stranded
+			? await db.from('parties').update(row).eq('id', stranded.id).select('id, slug').single()
+			: await db
+					.from('parties')
+					.insert({
+						...row,
+						status: 'pending_review', // moderation queue (TRD §15)
+						leader_id: userId
+					})
+					.select('id, slug')
+					.single();
 		if (insertErr || !party) {
 			return fail(500, { error: 'Gagal menerbitkan partai. Coba lagi.' });
 		}
@@ -75,7 +93,10 @@ export const actions: Actions = {
 		// founder case for pending_review parties.
 		const joinRes = await invokeEdge(event, 'join-party', { party_id: party.id });
 		if (!joinRes.ok && joinRes.data.error !== 'already_member') {
-			return fail(500, { error: 'Partai terbit, tapi keanggotaan pendiri gagal. Hubungi admin.' });
+			console.error('join-party failed at publish', joinRes.status, joinRes.data);
+			return fail(500, {
+				error: `Partai terbit, tapi keanggotaan pendiri gagal (${joinRes.data.error ?? joinRes.status}). Coba terbitkan ulang.`
+			});
 		}
 
 		// No redirect: the client still uploads the logo against this row.

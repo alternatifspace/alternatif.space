@@ -21,6 +21,7 @@ docs/        — PRDs and TRD
 |-----------|----------------|
 | `apps/mufakat/` or mufakat features | `docs/prd/mufakat-v0.1.md` + `docs/trd/v1.3.md` |
 | `apps/partai/` or partai features | `docs/prd/partai-alternatif-v0.3.md` + `docs/trd/v1.3.md` |
+| `apps/www/` or the root-domain landing page | `docs/prd/www-landing-v0.1.md` + `docs/trd/v1.3.md` |
 | `supabase/` or any schema/DB change | `docs/trd/v1.3.md` |
 | `packages/ui/` or shared components | `docs/trd/v1.3.md` |
 | New app (simposium, perpus) or cross-cutting feature | all three docs |

@@ -8,6 +8,8 @@
 		ARCHETYPE_COPY,
 		OPTION_LABELS,
 		PARAM_LABELS,
+		RECALL_PETITION_RANGE,
+		RECALL_VOTE_RANGE,
 		formatParam,
 		formatPercent,
 		type Archetype
@@ -20,6 +22,7 @@
 	let { form } = $props();
 
 	const DRAFT_KEY = 'buat-partai-draft';
+	const MANIFESTO_MIN_WORDS = 50;
 	const draft = new CreatePartyDraft();
 	const ctx = useClerkContext();
 
@@ -27,8 +30,6 @@
 	let publishing = $state(false);
 
 	const ARCHETYPES: Archetype[] = ['vanguard', 'republic', 'commune', 'custom'];
-	const PETITION_OPTIONS = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5];
-	const VOTE_OPTIONS = [0.501, 0.55, 0.6, 0.65, 0.7, 0.75];
 	const GOVERNANCE_KEYS: Array<keyof GovernanceConfig> = [
 		'recall_petition_threshold',
 		'recall_vote_threshold',
@@ -38,8 +39,11 @@
 		'mufakat_voice'
 	];
 
-	const step3Complete = $derived(
-		draft.name.trim().length > 0 && draft.manifestoText.trim().length >= 200
+	const manifestoWordCount = $derived(
+		draft.manifestoText.trim().split(/\s+/).filter(Boolean).length
+	);
+	const identityComplete = $derived(
+		draft.name.trim().length > 0 && manifestoWordCount >= MANIFESTO_MIN_WORDS
 	);
 
 	// Auto-save draft (P0-06): everything except the logo blob.
@@ -59,9 +63,21 @@
 		if (restored) localStorage.setItem(DRAFT_KEY, snapshot);
 	});
 
-	function setThreshold(key: 'recall_petition_threshold' | 'recall_vote_threshold', raw: string) {
-		draft.config[key] = raw === '' ? null : parseFloat(raw);
+	// The vote slider runs 50%–75%; its bottom stop means the TRD's "50% + 1"
+	// (stored as 0.501). Rounding strips range-input float noise.
+	const VOTE_SLIDER_MIN = 0.5;
+	function setPetition(raw: string) {
+		draft.config.recall_petition_threshold = Math.round(parseFloat(raw) * 1000) / 1000;
 	}
+	function setVote(raw: string) {
+		const v = Math.round(parseFloat(raw) * 1000) / 1000;
+		draft.config.recall_vote_threshold = v === VOTE_SLIDER_MIN ? 0.501 : v;
+	}
+	const voteSliderValue = $derived(
+		draft.config.recall_vote_threshold === 0.501
+			? VOTE_SLIDER_MIN
+			: (draft.config.recall_vote_threshold ?? 0.6)
+	);
 
 	async function uploadLogoAndFinish(partyId: string, slug: string) {
 		if (draft.logoBlob) {
@@ -86,107 +102,152 @@
 	<title>Dirikan partai — partai.alternatif.space</title>
 </svelte:head>
 
+{#snippet governanceParams()}
+	<div class="flex flex-col gap-4">
+		<label class="flex flex-col gap-1">
+			<span class="flex justify-between text-sm">
+				<span class="font-medium">{PARAM_LABELS.recall_petition_threshold}</span>
+				<span class="text-gray-600">
+					{draft.config.recall_petition_threshold === null
+						? '—'
+						: `${formatPercent(draft.config.recall_petition_threshold)} anggota`}
+				</span>
+			</span>
+			<input
+				type="range"
+				min={RECALL_PETITION_RANGE.min}
+				max={RECALL_PETITION_RANGE.max}
+				step={RECALL_PETITION_RANGE.step}
+				value={draft.config.recall_petition_threshold ?? 0.3}
+				oninput={(e) => setPetition(e.currentTarget.value)}
+				class="min-h-11 accent-slate-800"
+			/>
+			<span class="flex justify-between text-xs text-gray-400">
+				<span>{formatPercent(RECALL_PETITION_RANGE.min)}</span>
+				<span>{formatPercent(RECALL_PETITION_RANGE.max)}</span>
+			</span>
+		</label>
+
+		<label class="flex flex-col gap-1">
+			<span class="flex justify-between text-sm">
+				<span class="font-medium">{PARAM_LABELS.recall_vote_threshold}</span>
+				<span class="text-gray-600">
+					{draft.config.recall_vote_threshold === null
+						? '—'
+						: draft.config.recall_vote_threshold === 0.501
+							? '50% + 1'
+							: formatPercent(draft.config.recall_vote_threshold)}
+				</span>
+			</span>
+			<input
+				type="range"
+				min={VOTE_SLIDER_MIN}
+				max={RECALL_VOTE_RANGE.max}
+				step={RECALL_VOTE_RANGE.step}
+				value={voteSliderValue}
+				oninput={(e) => setVote(e.currentTarget.value)}
+				class="min-h-11 accent-slate-800"
+			/>
+			<span class="flex justify-between text-xs text-gray-400">
+				<span>50% + 1</span>
+				<span>{formatPercent(RECALL_VOTE_RANGE.max)}</span>
+			</span>
+		</label>
+
+		{#each ['manifesto_approval', 'membership_model', 'member_removal_authority', 'mufakat_voice'] as const as key (key)}
+			<label class="flex flex-col gap-1">
+				<span class="text-sm font-medium">{PARAM_LABELS[key]}</span>
+				<select
+					class="min-h-11 rounded-md border border-gray-300 px-2"
+					value={draft.config[key] ?? ''}
+					onchange={(e) => {
+						// @ts-expect-error narrow per-key union assignment
+						draft.config[key] = e.currentTarget.value === '' ? null : e.currentTarget.value;
+					}}
+				>
+					<option value="" disabled>— pilih —</option>
+					{#each Object.entries(OPTION_LABELS[key]) as [value, label] (value)}
+						<option {value}>{label}</option>
+					{/each}
+				</select>
+			</label>
+		{/each}
+
+		{#if draft.unsetCount > 0}
+			<!-- Custom-path completion counter (5.23) -->
+			<p class="text-sm text-amber-700">
+				{draft.unsetCount} dari {draft.totalParams} parameter belum diatur
+			</p>
+		{/if}
+	</div>
+{/snippet}
+
 <main class="mx-auto max-w-2xl p-4 pb-16">
 	<h1 class="text-2xl font-bold">Dirikan partai</h1>
 	<ol class="mt-3 flex gap-1 text-xs text-gray-400">
-		{#each ['Titik awal', 'Tata kelola', 'Identitas', 'Dewan', 'Tinjau'] as label, i (label)}
+		{#each ['Titik awal', 'Identitas', 'Dewan', 'Tinjau'] as label, i (label)}
 			<li class="flex-1 border-t-4 pt-1 {draft.step > i ? 'border-slate-800 text-slate-800 font-medium' : 'border-gray-200'}">
 				{i + 1}. {label}
 			</li>
 		{/each}
 	</ol>
 
-	<!-- Step 1 — starting point (5.21). Archetype = UI-only pre-fill, never stored (Q7). -->
+	<!-- Step 1 — starting point + governance parameters (5.21–5.23).
+	     Archetype = UI-only pre-fill, never stored (Q7). The parameter form
+	     lives under the cards: always open for Custom, collapsible for presets. -->
 	{#if draft.step === 1}
-		<div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-			{#each ARCHETYPES as archetype (archetype)}
-				<button
-					type="button"
-					class="rounded-lg border-2 p-4 text-left hover:border-slate-400 {draft.archetype === archetype
-						? 'border-slate-800'
-						: 'border-gray-200'}"
-					onclick={() => draft.selectArchetype(archetype)}
-				>
-					<span class="block font-bold">{ARCHETYPE_COPY[archetype].name}</span>
-					<span class="mt-1 block text-sm text-gray-600">"{ARCHETYPE_COPY[archetype].tagline}"</span>
-				</button>
-			{/each}
-		</div>
-
-	<!-- Step 2 — governance parameters (5.22, 5.23) -->
-	{:else if draft.step === 2}
 		<div class="mt-6 flex flex-col gap-4">
-			<label class="flex flex-col gap-1">
-				<span class="text-sm font-medium">{PARAM_LABELS.recall_petition_threshold}</span>
-				<select
-					class="min-h-11 rounded-md border border-gray-300 px-2"
-					value={draft.config.recall_petition_threshold?.toString() ?? ''}
-					onchange={(e) => setThreshold('recall_petition_threshold', e.currentTarget.value)}
-				>
-					<option value="" disabled>— pilih —</option>
-					{#each PETITION_OPTIONS as v (v)}
-						<option value={v.toString()}>{formatPercent(v)} anggota</option>
-					{/each}
-				</select>
-			</label>
-
-			<label class="flex flex-col gap-1">
-				<span class="text-sm font-medium">{PARAM_LABELS.recall_vote_threshold}</span>
-				<select
-					class="min-h-11 rounded-md border border-gray-300 px-2"
-					value={draft.config.recall_vote_threshold?.toString() ?? ''}
-					onchange={(e) => setThreshold('recall_vote_threshold', e.currentTarget.value)}
-				>
-					<option value="" disabled>— pilih —</option>
-					{#each VOTE_OPTIONS as v (v)}
-						<option value={v.toString()}>{v === 0.501 ? '50% + 1' : formatPercent(v)}</option>
-					{/each}
-				</select>
-			</label>
-
-			{#each ['manifesto_approval', 'membership_model', 'member_removal_authority', 'mufakat_voice'] as const as key (key)}
-				<label class="flex flex-col gap-1">
-					<span class="text-sm font-medium">{PARAM_LABELS[key]}</span>
-					<select
-						class="min-h-11 rounded-md border border-gray-300 px-2"
-						value={draft.config[key] ?? ''}
-						onchange={(e) => {
-							// @ts-expect-error narrow per-key union assignment
-							draft.config[key] = e.currentTarget.value === '' ? null : e.currentTarget.value;
-						}}
+			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+				{#each ARCHETYPES as archetype (archetype)}
+					<button
+						type="button"
+						class="rounded-lg border-2 p-4 text-left hover:border-slate-400 {draft.archetype === archetype
+							? 'border-slate-800'
+							: 'border-gray-200'}"
+						onclick={() => draft.selectArchetype(archetype)}
 					>
-						<option value="" disabled>— pilih —</option>
-						{#each Object.entries(OPTION_LABELS[key]) as [value, label] (value)}
-							<option {value}>{label}</option>
-						{/each}
-					</select>
-				</label>
-			{/each}
+						<span class="block font-bold">{ARCHETYPE_COPY[archetype].name}</span>
+						<span class="mt-1 block text-sm text-gray-600">"{ARCHETYPE_COPY[archetype].tagline}"</span>
+					</button>
+				{/each}
+			</div>
 
-			{#if draft.unsetCount > 0}
-				<!-- Custom-path completion counter (5.23) -->
-				<p class="text-sm text-amber-700">
-					{draft.unsetCount} dari {draft.totalParams} parameter belum diatur
+			{#if draft.archetype === 'custom'}
+				<section class="rounded-lg border border-gray-200 p-4">
+					<h2 class="mb-4 font-semibold">Atur parameter tata kelola</h2>
+					{@render governanceParams()}
+				</section>
+			{:else if draft.archetype}
+				<details class="rounded-lg border border-gray-200 p-4">
+					<summary class="cursor-pointer font-semibold">Lihat & sesuaikan parameter tata kelola</summary>
+					<div class="mt-4">
+						{@render governanceParams()}
+					</div>
+				</details>
+			{/if}
+
+			{#if draft.archetype}
+				<p class="rounded-md bg-amber-50 p-3 text-sm text-amber-900">
+					Konfigurasi ini <strong>terkunci permanen</strong> begitu partai terbit — pilih dengan
+					sadar. Masa honeymoon 3 bulan berjalan setelah terbit; selama itu recall ketua belum
+					dapat dimulai.
 				</p>
 			{/if}
 
-			<div class="flex gap-2">
-				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 1)}>
-					Kembali
-				</button>
+			<div>
 				<button
 					type="button"
 					class="min-h-11 rounded-md bg-slate-800 px-6 font-semibold text-white disabled:opacity-40"
-					disabled={draft.unsetCount > 0}
-					onclick={() => (draft.step = 3)}
+					disabled={!draft.archetype || draft.unsetCount > 0}
+					onclick={() => (draft.step = 2)}
 				>
 					Lanjut
 				</button>
 			</div>
 		</div>
 
-	<!-- Step 3 — identity (5.24): name, logo, tagline, manifesto -->
-	{:else if draft.step === 3}
+	<!-- Step 2 — identity (5.24): name, logo, tagline, manifesto -->
+	{:else if draft.step === 2}
 		<div class="mt-6 flex flex-col gap-4">
 			<label class="flex flex-col gap-1">
 				<span class="text-sm font-medium">Nama partai</span>
@@ -221,28 +282,28 @@
 						}}
 					/>
 				{/if}
-				<span class="text-xs {draft.manifestoText.trim().length >= 200 ? 'text-gray-400' : 'text-amber-700'}">
-					{draft.manifestoText.trim().length}/200 karakter minimum — draf tersimpan otomatis
+				<span class="text-xs {manifestoWordCount >= MANIFESTO_MIN_WORDS ? 'text-gray-400' : 'text-amber-700'}">
+					{manifestoWordCount}/{MANIFESTO_MIN_WORDS} kata minimum — draf tersimpan otomatis
 				</span>
 			</div>
 
 			<div class="flex gap-2">
-				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 2)}>
+				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 1)}>
 					Kembali
 				</button>
 				<button
 					type="button"
 					class="min-h-11 rounded-md bg-slate-800 px-6 font-semibold text-white disabled:opacity-40"
-					disabled={!step3Complete}
-					onclick={() => (draft.step = 4)}
+					disabled={!identityComplete}
+					onclick={() => (draft.step = 3)}
 				>
 					Lanjut
 				</button>
 			</div>
 		</div>
 
-	<!-- Step 4 — council toggle (5.25) -->
-	{:else if draft.step === 4}
+	<!-- Step 3 — council toggle (5.25) -->
+	{:else if draft.step === 3}
 		<div class="mt-6 flex flex-col gap-4">
 			<label class="flex items-start gap-3 rounded-lg border border-gray-200 p-4">
 				<input type="checkbox" bind:checked={draft.councilEnabled} class="mt-1 h-5 w-5" />
@@ -254,17 +315,17 @@
 				</span>
 			</label>
 			<div class="flex gap-2">
-				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 3)}>
+				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 2)}>
 					Kembali
 				</button>
-				<button type="button" class="min-h-11 rounded-md bg-slate-800 px-6 font-semibold text-white" onclick={() => (draft.step = 5)}>
+				<button type="button" class="min-h-11 rounded-md bg-slate-800 px-6 font-semibold text-white" onclick={() => (draft.step = 4)}>
 					Lanjut
 				</button>
 			</div>
 		</div>
 
-	<!-- Step 5 — review & publish (5.26): config locks permanently on publish -->
-	{:else if draft.step === 5}
+	<!-- Step 4 — review & publish (5.26): config locks permanently on publish -->
+	{:else if draft.step === 4}
 		<div class="mt-6 flex flex-col gap-4">
 			<section class="rounded-lg border border-gray-200 p-4">
 				<div class="flex items-center gap-3">
@@ -321,7 +382,7 @@
 				<input type="hidden" name="manifesto_html" value={draft.manifestoHtml} />
 				<input type="hidden" name="manifesto_text" value={draft.manifestoText} />
 				<input type="hidden" name="council_enabled" value={draft.councilEnabled.toString()} />
-				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 4)}>
+				<button type="button" class="min-h-11 rounded-md border border-gray-300 px-5" onclick={() => (draft.step = 3)}>
 					Kembali
 				</button>
 				<button

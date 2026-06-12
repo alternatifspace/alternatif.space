@@ -6,6 +6,7 @@
   "scripts": {
     "dev:partai": "pnpm --filter partai dev",
     "dev:mufakat": "pnpm --filter mufakat dev",
+    "dev:www": "pnpm --filter www dev",
     "build": "pnpm -r build",
     "check": "pnpm -r check",
     "db:reset": "supabase db reset",

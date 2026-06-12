@@ -49,10 +49,16 @@ export class CreatePartyDraft {
 		return Object.keys(this.config).length;
 	}
 
+	// Stays on Step 1: the parameter form expands in place under the cards
+	// (open for Custom, collapsible for presets). Sliders always sit at a
+	// value, so Custom pre-seeds both thresholds; the four selects stay blank
+	// and drive the completion counter (P0-05).
 	selectArchetype(archetype: Archetype) {
 		this.archetype = archetype;
-		this.config = archetype === 'custom' ? { ...EMPTY_CONFIG } : { ...PRESETS[archetype] };
-		this.step = 2;
+		this.config =
+			archetype === 'custom'
+				? { ...EMPTY_CONFIG, recall_petition_threshold: 0.3, recall_vote_threshold: 0.6 }
+				: { ...PRESETS[archetype] };
 	}
 
 	/** Auto-save payload (P0-06) — the logo blob is deliberately excluded. */
@@ -71,7 +77,9 @@ export class CreatePartyDraft {
 	}
 
 	restore(saved: SerializedDraft) {
-		this.step = saved.step;
+		// Older drafts were saved with the 5-step wizard (Tata kelola was its
+		// own step); clamp into the current 4-step range.
+		this.step = Math.min(Math.max(saved.step, 1), 4);
 		this.archetype = saved.archetype;
 		this.config = { ...EMPTY_CONFIG, ...saved.config };
 		this.name = saved.name;

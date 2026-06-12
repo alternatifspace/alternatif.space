@@ -6,3 +6,59 @@ project_id = "alternatif-space"
 [auth.third_party.clerk]
 enabled = true
 domain = "social-leech-62.clerk.accounts.dev"
+
+# Edge Function gateway JWT verification only accepts Supabase-signed JWTs
+# (legacy HS256 or Supabase signing keys) — it rejects Clerk's RS256 tokens
+# even with third-party auth configured. User-facing functions therefore
+# disable it and verify the Clerk signature in-function against Clerk's JWKS
+# (callerUserId in _shared/client.ts, CLERK_ISSUER secret). The cron functions
+# (expire-op-windows, update-dormant-status, generate-share-card) are called
+# with the Supabase service key and keep gateway verification.
+
+[functions.generate-invite-token]
+verify_jwt = false
+
+[functions.join-party]
+verify_jwt = false
+
+[functions.leave-party]
+verify_jwt = false
+
+[functions.mufakat-admin-spinoff]
+verify_jwt = false
+
+[functions.mufakat-close-thread]
+verify_jwt = false
+
+[functions.mufakat-confirm-dedup-reference]
+verify_jwt = false
+
+[functions.mufakat-create-comment]
+verify_jwt = false
+
+[functions.mufakat-create-thread]
+verify_jwt = false
+
+[functions.mufakat-merge-threads]
+verify_jwt = false
+
+[functions.mufakat-react]
+verify_jwt = false
+
+[functions.mufakat-report-content]
+verify_jwt = false
+
+[functions.mufakat-respond-opship]
+verify_jwt = false
+
+[functions.mufakat-review-report]
+verify_jwt = false
+
+[functions.review-application]
+verify_jwt = false
+
+[functions.submit-application]
+verify_jwt = false
+
+[functions.use-invite-token]
+verify_jwt = false

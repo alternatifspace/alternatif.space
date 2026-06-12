@@ -53,6 +53,7 @@
 - [x] **3.13** Partai Phase 0 schema gaps — `pending_review` party status, `users_self_insert` RLS, storage buckets + policies (`00007_partai_phase0_gaps.sql`)
 - [x] **3.14** Mufakat RLS gaps — author soft-delete policy, admin semantic-flag update policy (`00008_mufakat_rls_gaps.sql`)
 - [x] **3.15** Clerk text user IDs — Clerk reserves JWT `sub` (always `user_…`, never a UUID), so all user-id columns converted uuid→text and every policy moved from `auth.uid()` to `clerk_uid()` = `auth.jwt()->>'sub'` (`00009_clerk_text_user_ids.sql`; updates TRD §5)
+- [x] **3.16** Explicit Data API grants — newer Supabase images stopped auto-granting DML on `public` tables (local stack returned `42501 permission denied` for every authenticated write); RLS remains the row gate (`20260612014704_table_grants.sql`)
 
 ---
 
@@ -85,6 +86,8 @@
 ### Shared Modules
 
 - [x] **4.19** `_shared/client.ts` — service client, JWT extraction, CORS (TRD §10)
+- [x] **4.22** Clerk JWT verification in-function — the gateway's `verify_jwt` only accepts Supabase-signed JWTs and 401'd every Clerk-authenticated call in production; user-facing functions now set `verify_jwt = false` (config.toml) and `callerUserId` verifies the RS256 signature against Clerk's JWKS (`CLERK_ISSUER` secret). Cron functions stay gateway-verified.
+- [ ] **4.23** Production rollout of 4.22 — `supabase secrets set CLERK_ISSUER=https://clerk.alternatif.space` + `supabase functions deploy` (config.toml carries the per-function `verify_jwt = false`)
 - [x] **4.20** `_shared/membership.ts` — current membership, mufakat party flag, config reader, admin check, notification dispatch (TRD §10)
 - [x] **4.21** `_shared/mufakat.ts` — TipTap-to-text, slugify, threshold evaluation, descendants collection, depth recomputation, split execution (TRD §10)
 
@@ -120,16 +123,21 @@
 - [x] **5.18** `/partai/[slug]/anggota` — current member list with leader indicator (TRD §11, P0-04)
 - [x] **5.19** OG meta tags per party — `og:title`, `og:description`, `og:image` using share card (P0-13)
 
-### Create Party Flow (5-step wizard)
+### Create Party Flow (4-step wizard)
+
+> 2026-06-12: wizard compressed from 5 to 4 steps — governance parameters fold
+> into Step 1 (open inline for Custom, collapsible for presets), recall
+> thresholds became sliders, manifesto minimum changed to 50 words. Deviates
+> from PRD P0-05/P0-06 pending the governance-onboarding brainstorm.
 
 - [x] **5.20** `/buat-partai` — multi-step flow, local `CreatePartyDraft` store holds state until publish (TRD §11)
-- [x] **5.21** Step 1 — Select starting point: Vanguard, Republic, Commune, Custom (P0-05)
-- [x] **5.22** Step 2 — Governance parameters: pre-filled (preset paths) or blank (Custom path) (P0-05)
-- [x] **5.23** Step 2 — Custom path: CTA disabled until all params set, completion counter ("X dari Y parameter belum diatur") (P0-05)
-- [x] **5.24** Step 3 — Party identity: name, logo upload (JPG/PNG/WebP, max 2MB, square crop), tagline, manifesto editor (TipTap) (P0-05)
-- [x] **5.25** Step 4 — Enable council toggle (optional, Phase 2 execution) (P0-05)
-- [x] **5.26** Step 5 — Review & publish: all settings displayed, config permanently locked on publish, honeymoon starts (`now() + 3 months`) (P0-05)
-- [x] **5.27** Manifesto editor — TipTap: H2/H3, bold, italic, bullet, numbered, blockquote; no image embeds; 200-char minimum; auto-save draft (P0-06)
+- [x] **5.21** Step 1 — Select starting point: Vanguard, Republic, Commune, Custom; governance parameters expand in place (always open for Custom, collapsible for presets) with permanent-lock + honeymoon note (P0-05)
+- [x] **5.22** Step 1 — Governance parameters: pre-filled (preset paths) or blank selects + default-seeded threshold sliders (Custom path); recall thresholds use range sliders (P0-05)
+- [x] **5.23** Step 1 — Custom path: CTA disabled until all params set, completion counter ("X dari Y parameter belum diatur") (P0-05)
+- [x] **5.24** Step 2 — Party identity: name, logo upload (JPG/PNG/WebP, max 2MB, square crop), tagline, manifesto editor (TipTap) (P0-05)
+- [x] **5.25** Step 3 — Enable council toggle (optional, Phase 2 execution) (P0-05)
+- [x] **5.26** Step 4 — Review & publish: all settings displayed, config permanently locked on publish, honeymoon starts (`now() + 3 months`); publish reuses a stranded `pending_review` party from a previously failed attempt (P0-05)
+- [x] **5.27** Manifesto editor — TipTap: H2/H3, bold, italic, bullet, numbered, blockquote; no image embeds; 50-word minimum; auto-save draft (P0-06)
 - [x] **5.28** Logo upload — Supabase Storage (`party-logos/{party_id}/logo.{ext}`), client-side canvas crop to square (P0-07, TRD §13)
 - [x] **5.29** Archetype label — never stored in DB, never returned by API, never shown publicly (P0-05, Q7)
 
