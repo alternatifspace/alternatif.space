@@ -22,6 +22,27 @@
 		name="description"
 		content="Dirikan partai, tulis manifesto, dan bawa posisimu ke ruang deliberasi lintas-partai."
 	/>
+	<!-- W0-06: canonical link target for anything platform-level. OG image is
+	     a static platform-level share card — party cards (P0-13) are separate. -->
+	<link rel="canonical" href="https://alternatif.space/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://alternatif.space/" />
+	<meta property="og:title" content="alternatif.space — Politik soal posisi, bukan persona." />
+	<meta
+		property="og:description"
+		content="Dirikan partai, tulis manifesto, dan bawa posisimu ke ruang deliberasi lintas-partai."
+	/>
+	<meta property="og:image" content="https://alternatif.space/og-card.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:locale" content="id_ID" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="alternatif.space — Politik soal posisi, bukan persona." />
+	<meta
+		name="twitter:description"
+		content="Dirikan partai, tulis manifesto, dan bawa posisimu ke ruang deliberasi lintas-partai."
+	/>
+	<meta name="twitter:image" content="https://alternatif.space/og-card.png" />
 </svelte:head>
 
 <ActiveVariant />

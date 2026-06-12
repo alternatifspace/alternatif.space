@@ -278,3 +278,19 @@
 - [ ] **10.5** Split depth distribution (D3 pathology watch)
 - [ ] **10.6** Spin-off lifecycle completion rate (Selesai vs. Pertanyaan Terbuka vs. abandoned)
 - [ ] **10.7** Flag → spin-off conversion rate (precision baseline for future AI detection)
+
+---
+
+## 11. www Landing (`apps/www`) — www-landing PRD v0.1
+
+> Ships with the Phase 0 launch unit; independent static deployment, not technically gated on partai/mufakat (PRD overview). TRD changes tracked in `docs/trd/v1.4-addendum-www.md`.
+
+- [x] **11.1** App scaffold — SvelteKit, `@sveltejs/adapter-cloudflare`, fully prerendered (`prerender = true` in root `+layout.ts`); Tailwind v4 (PRD §7)
+- [x] **11.2** Prototype route — three §6 design variants (Manifesto / Civic / Activist) as toggleable components with floating switcher; winner named in PRD v0.2, losers + switcher deleted then
+- [x] **11.3** W0-01 auth — client-only Clerk (no server hook; clerk-js reads the shared `.alternatif.space` cookie after hydration): embedded `<SignUp routing="hash" />` in each hero, `forceRedirectUrl` → `partai.alternatif.space/onboarding`, signed-in state swaps all CTAs to "Lanjut ke partai →", `/masuk` route with `<SignIn />`
+- [x] **11.4** W0-02 three-step explainer, W0-03 four-ruang cards ("segera" badges on simposium/perpus), W0-04 governance-as-features, W0-05 closing CTA + footer — present in all three variants
+- [x] **11.5** W0-06 SEO — `lang="id"`, canonical, OG + Twitter tags, `og:locale id_ID`, placeholder `static/og-card.png` (1200×630; replace with designed asset once §6 winner is chosen)
+- [ ] **11.6** Design winner chosen by eye (PRD §6) → bump PRD to v0.2, delete losing variants and prototype switcher
+- [ ] **11.7** Cloudflare Pages deployment — apex custom domain `alternatif.space`, env var `PUBLIC_CLERK_PUBLISHABLE_KEY` (PRD §7, TRD §4)
+- [ ] **11.8** Verify signed-in detection on the apex with the production Clerk instance (depends on 1.8 cross-subdomain SSO)
+- [ ] **11.9** Resolve W-Q1 (inline `<SignUp />` vs. dedicated `/daftar` route — current implementation: inline embed), W-Q2 ("segera" badges vs. hiding future ruang), W-Q3 (launch blind vs. pull analytics decision forward — see §10)
