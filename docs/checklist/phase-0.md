@@ -271,13 +271,13 @@
 
 ## 10. Analytics Signals (Mufakat PRD Appendix B)
 
-- [ ] **10.1** Dedup suggestion shown → accepted rate (does M0-02 redirect?)
-- [ ] **10.2** Good-question reactions per comment distribution (floor of 5 calibrated?)
-- [ ] **10.3** Split survival — % of split threads reaching 5+ comments
-- [ ] **10.4** OP opt-out rate (is OP-ship perceived as burden?)
-- [ ] **10.5** Split depth distribution (D3 pathology watch)
-- [ ] **10.6** Spin-off lifecycle completion rate (Selesai vs. Pertanyaan Terbuka vs. abandoned)
-- [ ] **10.7** Flag → spin-off conversion rate (precision baseline for future AI detection)
+- [x] **10.1** Dedup suggestion shown → accepted rate (does M0-02 redirect?)
+- [x] **10.2** Good-question reactions per comment distribution (floor of 5 calibrated?)
+- [x] **10.3** Split survival — % of split threads reaching 5+ comments
+- [x] **10.4** OP opt-out rate (is OP-ship perceived as burden?)
+- [x] **10.5** Split depth distribution (D3 pathology watch)
+- [x] **10.6** Spin-off lifecycle completion rate (Selesai vs. Pertanyaan Terbuka vs. abandoned)
+- [x] **10.7** Flag → spin-off conversion rate (precision baseline for future AI detection)
 
 ---
 
