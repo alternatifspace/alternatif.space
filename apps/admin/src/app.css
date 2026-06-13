@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Tailwind v4 does not scan symlinked workspace packages by default —
+   register the shared component library as a source so .lp-* classes resolve. */
+@source '../../../packages/ui/src';
+
+html {
+	font-size: 16px;
+}

@@ -110,10 +110,14 @@ Run `pnpm db:reset` before starting. Confirms:
   1. Visit `/buat-partai` → redirected to `/masuk`
   2. Visit `/onboarding` → redirected to `/masuk`
   3. Visit `/bergabung` → redirected to `/masuk` (after auth check fails)
+  
   **Steps (as signed-in, no party):**
+
   4. Visit `/buat-partai` → allowed (no redirect)
   5. Visit `/partai/[any-slug]/bagikan` → allowed
+
   **Steps (on mufakat as anonymous):**
+
   6. Visit `/buat` → redirected to `partai.alternatif.space` sign-in
   7. Visit `/notifikasi` → redirected to `partai.alternatif.space`
   **Expected:** All redirects use 303. Redirect URLs preserve the intended destination.
