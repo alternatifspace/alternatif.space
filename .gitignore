@@ -13,3 +13,4 @@ supabase/.branches/
 apps/native/android/
 apps/native/ios/
 *.log
+.pnpm-store/*

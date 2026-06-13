@@ -281,16 +281,20 @@
 
 ---
 
-## 11. www Landing (`apps/www`) — www-landing PRD v0.1
+## 11. www Landing (`apps/www`) — www-landing PRD v0.2
 
-> Ships with the Phase 0 launch unit; independent static deployment, not technically gated on partai/mufakat (PRD overview). TRD changes tracked in `docs/trd/v1.4-addendum-www.md`.
+> Ships with the Phase 0 launch unit; independent static deployment, not technically gated on partai/mufakat (PRD overview). TRD changes tracked in `docs/trd/v1.4-addendum-www.md`. Brand foundation: `docs/brand/jiwa.md` (foundational, wins all conflicts) → `docs/brand/soul-v0.2.md` (normative for all copy/design; supersedes v0.1).
 
 - [x] **11.1** App scaffold — SvelteKit, `@sveltejs/adapter-cloudflare`, fully prerendered (`prerender = true` in root `+layout.ts`); Tailwind v4 (PRD §7)
-- [x] **11.2** Prototype route — three §6 design variants (Manifesto / Civic / Activist) as toggleable components with floating switcher; winner named in PRD v0.2, losers + switcher deleted then
+- [x] **11.2** Prototype route — three brand-derived PRD v0.2 §6 variants (Warisan / Pamflet / Arena), each an integrated copy + visual system traced to a soul-doc pillar; toggleable with floating switcher; winner named in PRD v0.3, losers + switcher deleted then. (Supersedes the four v0.1 aesthetic-first variants, deleted 2026-06-12.)
+- [x] **11.2a** Brand soul doc distilled from project knowledge (`docs/brand/soul-v0.1.md`): essence, pillars, voice/register/lexicon, cultural anchors, naming logic, design implications
+- [x] **11.2b** Jiwa doc ("The Soul of Alternatif Space" v1.0) mirrored into repo (`docs/brand/jiwa.md`); brand soul revised to v0.2 as its downstream (premises, anatomy cycle, guardrails, dual emotional promise); landing PRD amended to v0.2.1 (W0-07 KBBI block, W-Q5, belonging-before-rigor criterion) — 2026-06-13
+- [x] **11.2c** Variants rebuilt against soul v0.2 / PRD v0.2.2 (2026-06-13): W0-07 KBBI element per variant (Warisan: footnote ¹ anchored to "partai" in hero support; Pamflet: inverted full-bleed dictionary poster band, sections renumbered 01–05; Arena: paper quiet band between W0-02 and W0-03), belonging-before-rigor hero beats in all three, Arena count-up numerals (gated on reduced-motion), Warisan paper grain
 - [x] **11.3** W0-01 auth — client-only Clerk (no server hook; clerk-js reads the shared `.alternatif.space` cookie after hydration): embedded `<SignUp routing="hash" />` in each hero, `forceRedirectUrl` → `partai.alternatif.space/onboarding`, signed-in state swaps all CTAs to "Lanjut ke partai →", `/masuk` route with `<SignIn />`
 - [x] **11.4** W0-02 three-step explainer, W0-03 four-ruang cards ("segera" badges on simposium/perpus), W0-04 governance-as-features, W0-05 closing CTA + footer — present in all three variants
 - [x] **11.5** W0-06 SEO — `lang="id"`, canonical, OG + Twitter tags, `og:locale id_ID`, placeholder `static/og-card.png` (1200×630; replace with designed asset once §6 winner is chosen)
-- [ ] **11.6** Design winner chosen by eye (PRD §6) → bump PRD to v0.2, delete losing variants and prototype switcher
+- [x] **11.6** Design winner chosen (2026-06-13): **Pamflet visual × Arena copy hybrid** (PRD v0.3) — inlined into `+page.svelte`, variants + switcher deleted, fonts cut to Archivo Black + Space Grotesk, amber accent layer added, marquee → tally divider, W0-03 poster cells, KBBI band after W0-02, signed-in hero state. Remaining: token-reconciliation pass against partai app identity
+- [ ] **11.6a** Token-reconciliation pass: partai app identity (Instrument Serif/DM Sans, ink-amber) vs. landing winner (Archivo Black/Space Grotesk, bone-ink-amber); partai register/onboarding voice reconciled toward Arena register (W-Q4 follow-up, partai PRD)
 - [ ] **11.7** Cloudflare Pages deployment — apex custom domain `alternatif.space`, env var `PUBLIC_CLERK_PUBLISHABLE_KEY` (PRD §7, TRD §4)
 - [ ] **11.8** Verify signed-in detection on the apex with the production Clerk instance (depends on 1.8 cross-subdomain SSO)
-- [ ] **11.9** Resolve W-Q1 (inline `<SignUp />` vs. dedicated `/daftar` route — current implementation: inline embed), W-Q2 ("segera" badges vs. hiding future ruang), W-Q3 (launch blind vs. pull analytics decision forward — see §10)
+- [x] **11.9** Open questions resolved (PRD v0.2.2, 2026-06-13): W-Q1 both — inline embed on desktop + new `/daftar` route (mobile CTA target, canonical signup URL); W-Q2 "segera" badges in all variants; W-Q3 launch blind, analytics → Phase 1 checklist; W-Q4 deferred to partai PRD (register/onboarding may be redesigned toward winning voice); W-Q5 per-direction KBBI placement (see 11.2c)

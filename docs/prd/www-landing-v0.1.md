@@ -71,15 +71,16 @@ Repeat the thesis in imperative form (*"Bawa posisimu."*) + Daftar button. Foote
 
 ## 6. Design Direction — to be prototyped
 
-"Cool" is a requirement. Three candidates will be built as toggleable variations on one prototype route, judged by eye, then the winner is named here in v0.2:
+"Cool" is a requirement. Candidates are built as toggleable variations on one prototype route, judged by eye, then the winner is named here in v0.2:
 
 | Direction | Character | Risk |
 |---|---|---|
 | **Manifesto / editorial** | Huge type, poster-like, high contrast; reads like a political pamphlet | May feel heavy for a signup page |
 | **Clean civic-tech** | Calm, institutional, slate/white like the apps; trust-first | Forgettable |
 | **Bold activist** | Strong color, scroll motion, movement energy | Can read as partisan — wrong signal for a cross-party platform |
+| **Awwwards** *(added 2026-06-12)* | Award-site energy: oversized Fraunces display type, electric ultramarine accent, scroll reveals, outline-text marquee, grain texture, hover micro-interactions | Motion/web-font weight must not break the "fast/static" constraint; ambition can age fast |
 
-Constraints for all three: mobile-first, fast (static, no JS beyond Clerk + minimal interaction), accessible contrast, Indonesian typography handled properly (long compound words — beware giant-type line breaks).
+Constraints for all candidates: mobile-first, fast (static, no JS beyond Clerk + minimal interaction — the Awwwards variant's IntersectionObserver reveals count as "minimal"; all motion respects `prefers-reduced-motion`, hidden-before-reveal states gate on `@media (scripting: enabled)`), accessible contrast, Indonesian typography handled properly (long compound words — beware giant-type line breaks). Fonts are self-hosted via `@fontsource-variable` (Fraunces, Space Grotesk) — no external font requests.
 
 ---
 

@@ -12,11 +12,11 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<main class="flex min-h-screen items-center justify-center bg-white p-4">
+<main class="flex min-h-screen items-center justify-center p-4" style="background:#f4f1ea;color:#141210">
 	<div>
 		<a href="/" class="mb-6 block text-center text-sm font-bold tracking-widest uppercase">
 			alternatif.space
 		</a>
-		<SignIn routing="hash" forceRedirectUrl={PARTAI_URL} signUpUrl="/" />
+		<SignIn routing="hash" forceRedirectUrl={PARTAI_URL} signUpUrl="/daftar" />
 	</div>
 </main>

@@ -19,12 +19,15 @@
 
 	let {
 		ctaClass = '',
-		noteClass = ''
+		noteClass = '',
+		appearance = undefined
 	}: {
 		/** Variant-styled class for the signed-in "Lanjut ke partai →" link */
 		ctaClass?: string;
 		/** Variant-styled class for the "Sudah punya akun?" line */
 		noteClass?: string;
+		/** Optional Clerk appearance object (e.g. dark variables for dark variants) */
+		appearance?: Record<string, unknown>;
 	} = $props();
 
 	const ctx = useClerkContext();
@@ -35,7 +38,7 @@
 	<a href={PARTAI_URL} class={ctaClass} data-testid="lanjut-ke-partai">Lanjut ke partai →</a>
 {:else}
 	<div class="min-h-96">
-		<SignUp routing="hash" forceRedirectUrl={ONBOARDING_URL} signInUrl="/masuk" />
+		<SignUp routing="hash" forceRedirectUrl={ONBOARDING_URL} signInUrl="/masuk" {appearance} />
 	</div>
 	<p class={noteClass}>
 		Sudah punya akun?

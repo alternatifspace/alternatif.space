@@ -124,6 +124,7 @@
 - [ ] **6.4** Route accumulation — open questions with 2+ independent parent threads
 - [ ] **6.5** Summary dispute rate — upheld vs. rejected vs. density
 - [ ] **6.6** Average session length increase (Phase 1 success criteria)
+- [ ] **6.7** Landing analytics (from www W-Q3, resolved 2026-06-13: launch blind) — pick tooling, then measure visitor → signup conversion and bounce rate against www PRD success criteria
 
 ---
 
