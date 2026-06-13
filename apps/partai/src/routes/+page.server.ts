@@ -11,6 +11,12 @@ import type { PageServerLoad } from './$types';
 // The signed-in branch is a redirect, not a render, so crawlers hitting / get
 // the indexable landing HTML.
 export const load: PageServerLoad = async (event) => {
+	// `/` serves different content per auth state (landing when signed-out,
+	// a redirect when signed-in), so it must never be shared-cached at the edge
+	// — otherwise a stale homepage is served to the wrong audience (the cause of
+	// the post-deploy stale-`/` we saw on Cloudflare).
+	event.setHeaders({ 'cache-control': 'private, no-store' });
+
 	const { signedIn, membership } = await event.parent();
 
 	if (signedIn) {
