@@ -128,7 +128,7 @@
 		{#if menuOpen}
 			<button
 				type="button"
-				class="fixed inset-0 z-40 bg-[#141210]/40 md:hidden"
+				class="fixed inset-0 z-40 bg-[var(--lp-ink)]/40 md:hidden"
 				aria-label="Tutup menu"
 				onclick={() => (menuOpen = false)}
 				transition:fade={{ duration: 150 }}
@@ -166,7 +166,7 @@
 		right: 0;
 		height: 3px;
 		z-index: 50;
-		background: linear-gradient(90deg, #141210, #c17d0f, #141210);
+			background: linear-gradient(90deg, var(--lp-ink), var(--lp-amber), var(--lp-ink));
 		background-size: 200% 100%;
 		animation: loading-slide 1s linear infinite;
 	}

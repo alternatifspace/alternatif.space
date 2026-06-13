@@ -1,28 +1,25 @@
+<script>
+	import '@alternatif/ui/landing.css';
+</script>
+
 <svelte:head>
 	<title>Bergabung — alternatif.space</title>
 </svelte:head>
 
-<main class="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 p-6 text-center">
-	<header>
-		<h1 class="text-3xl font-bold">Pasang benderamu</h1>
-		<p class="mt-4 text-gray-700">
+<div class="lp flex min-h-screen flex-col items-center justify-center px-5 py-20 text-center sm:px-10">
+	<header class="max-w-lg">
+		<p class="lp-mono text-sm tracking-[0.18em] uppercase opacity-60">
+			Kamu belum <span class="lp-amber font-bold">bawa bendera.</span>
+		</p>
+		<h1 class="lp-display-sm mt-4">Pasang benderamu dulu.</h1>
+		<p class="mt-6 leading-relaxed text-lg font-medium">
 			Kamu belum tergabung dalam partai mana pun. Untuk ikut berdiskusi di mufakat, pilih partai
 			yang posisinya kamu yakini — atau dirikan partaimu sendiri.
 		</p>
 	</header>
 
-	<div class="flex flex-col gap-3">
-		<a
-			href="/"
-			class="min-h-11 rounded-md bg-slate-800 px-6 py-3 font-semibold text-white hover:bg-slate-700"
-		>
-			Jelajahi partai
-		</a>
-		<a
-			href="/buat-partai"
-			class="min-h-11 rounded-md border border-slate-300 px-6 py-3 font-semibold text-slate-800 hover:bg-slate-50"
-		>
-			Dirikan partai baru
-		</a>
+	<div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+		<a href="/" class="lp-btn inline-block">Jelajahi partai →</a>
+		<a href="/buat-partai" class="lp-btn-outline inline-block">Dirikan partai baru</a>
 	</div>
-</main>
+</div>

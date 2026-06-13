@@ -63,7 +63,7 @@
 			</label>
 
 			{#if form?.error}
-				<p class="lp-mono text-sm" style="color: var(--lp-cap)">{form.error}</p>
+				<p class="lp-mono text-sm" style="color: var(--lp-amber)">{form.error}</p>
 			{/if}
 
 			<button type="submit" class="lp-btn inline-block">
