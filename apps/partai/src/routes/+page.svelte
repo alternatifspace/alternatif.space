@@ -70,8 +70,8 @@
 				</p>
 				<div class="mt-8 flex flex-wrap items-center gap-4">
 					<a href="/buat-partai" class="lp-btn inline-block">Dirikan Partai →</a>
-					<a href="/jelajah" class="lp-btn-ghost inline-block">Cari Partai</a>
 				</div>
+				<p class="lp-mono mt-3 text-sm opacity-70">Belum siap dirikan? <a href="/jelajah" class="lp-link">Jelajahi yang udah ada</a></p>
 				<span class="lp-stamp mt-8" aria-hidden="true">TANPA IZIN</span>
 			</div>
 		</div>
