@@ -2,7 +2,11 @@
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
 	import { SUBDOMAINS } from '$lib/urls';
+	import { env } from '$env/dynamic/public';
 	import '@alternatif/ui/landing.css';
+
+	// Cloudflare Turnstile is enabled only when a public site key is configured.
+	const turnstileKey = env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 
 	let name = '';
 	let email = '';
@@ -18,10 +22,15 @@
 		errorMessage = '';
 
 		try {
+			const widget = document.querySelector<HTMLInputElement>(
+				'[name="cf-turnstile-response"]'
+			);
+			const turnstileToken = widget?.value;
+
 			const res = await fetch('/api/contact', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name, email, message, _gotcha: gotcha })
+				body: JSON.stringify({ name, email, message, _gotcha: gotcha, turnstileToken })
 			});
 
 			const data = await res.json();
@@ -46,6 +55,9 @@
 		content="Ada yang mau disampaikan? Kirim pesan ke sapa@alternatif.space atau isi formulir di bawah."
 	/>
 	<link rel="canonical" href="https://alternatif.space/kontak" />
+	{#if turnstileKey}
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	{/if}
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://alternatif.space/kontak" />
 	<meta property="og:title" content="Kontak — alternatif.space" />
@@ -182,6 +194,10 @@
 				<label class="lp-honeypot" aria-hidden="true">
 					<input type="text" bind:value={gotcha} tabindex="-1" autocomplete="off" />
 				</label>
+
+				{#if turnstileKey}
+					<div class="cf-turnstile" data-sitekey={turnstileKey}></div>
+				{/if}
 
 				{#if status === 'error' && errorMessage}
 					<p class="lp-mono text-sm" style="color: var(--lp-amber)">{errorMessage}</p>

@@ -12,6 +12,11 @@
       "default": "./src/index.ts"
     },
     "./stores/*": "./src/stores/*",
+    "./tiptap": {
+      "types": "./src/tiptap-html.ts",
+      "svelte": "./src/tiptap-html.ts",
+      "default": "./src/tiptap-html.ts"
+    },
     "./landing.css": "./src/landing.css"
   },
   "scripts": {

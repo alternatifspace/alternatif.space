@@ -1,6 +1,7 @@
 import { serviceClient, callerUserId, json, handleOptions } from '../_shared/client.ts';
 import { currentMembership, mufakatPartyFlag, getConfig } from '../_shared/membership.ts';
 import { tiptapToText } from '../_shared/mufakat.ts';
+import { tiptapToHtml } from '../_shared/tiptap-html.ts';
 
 interface RateLimits {
   new_account_hours: number;
@@ -16,7 +17,9 @@ Deno.serve(async (req) => {
   const userId = await callerUserId(req);
   if (!userId) return json({ error: 'unauthenticated' }, 401);
 
-  const { thread_id, parent_id, content, html } = await req.json();
+  // html is intentionally NOT read from the request: display HTML is always
+  // re-derived server-side from the trusted JSON to prevent stored XSS.
+  const { thread_id, parent_id, content } = await req.json();
   if (!thread_id || !content) return json({ error: 'thread_id and content required' }, 400);
 
   const db = serviceClient();
@@ -83,7 +86,7 @@ Deno.serve(async (req) => {
       parent_id: parent_id ?? null,
       depth,
       content,
-      html: html ?? null,
+      html: tiptapToHtml(content),
       body_text: tiptapToText(content),
     })
     .select('id')

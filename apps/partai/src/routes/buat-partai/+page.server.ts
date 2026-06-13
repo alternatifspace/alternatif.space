@@ -1,4 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { tiptapToHtml } from '@alternatif/ui/tiptap';
 import { supabaseServer } from '$lib/supabase';
 import { invokeEdge } from '$lib/server/edge';
 import { validateConfig } from '$lib/governance';
@@ -36,7 +37,9 @@ export const actions: Actions = {
 		} catch {
 			return fail(400, { error: 'Data formulir tidak valid.' });
 		}
-		const manifestoHtml = (form.get('manifesto_html') as string | null) ?? '';
+		// Manifesto HTML is re-derived from the trusted JSON, never the client's
+		// `manifesto_html` field (prevents stored XSS via a forged form post).
+		const manifestoHtml = tiptapToHtml(manifesto) ?? '';
 		const manifestoText = ((form.get('manifesto_text') as string | null) ?? '').trim();
 
 		if (!name) return fail(400, { error: 'Nama partai wajib diisi.' });

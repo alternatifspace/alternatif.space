@@ -1,5 +1,6 @@
 import { SupabaseClient } from 'npm:@supabase/supabase-js@2';
 import { getConfig, notify } from './membership.ts';
+import { escapeHtml, tiptapToHtml } from './tiptap-html.ts';
 
 /** Plain-text extraction from TipTap JSON (feeds body_text → search_tsv). */
 export function tiptapToText(node: unknown): string {
@@ -200,7 +201,8 @@ export async function executeGoodQuestionSplit(
       slug: slugify(title),
       title,
       body_content: comment.content,
-      body_html: `${comment.html ?? ''}<blockquote data-context-block><p>${contextText}</p><p><a href="/diskusi/${parent?.slug}">← diskusi asal</a></p></blockquote>`,
+      // Display HTML re-derived from trusted JSON; context block text escaped.
+      body_html: `${tiptapToHtml(comment.content) ?? ''}<blockquote data-context-block><p>${escapeHtml(contextText)}</p><p><a href="/diskusi/${encodeURIComponent(parent?.slug ?? '')}">← diskusi asal</a></p></blockquote>`,
       body_text: `${bodyText}\n\n${contextText}`,
       op_id: comment.author_id,
       op_party_id: comment.author_party_id,

@@ -28,6 +28,18 @@ Deno.serve(async (req) => {
     .maybeSingle();
   if (pending) return json({ error: 'application_already_pending' }, 409);
 
+  // Anti-spam: cap applications per user per day across all parties — the
+  // per-party check above only stops repeats to the same party.
+  const dayAgo = new Date(Date.now() - 24 * 3600_000).toISOString();
+  const { count } = await db
+    .from('party_applications')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .gte('created_at', dayAgo);
+  if ((count ?? 0) >= 10) {
+    return json({ error: 'rate_limited', explanation: 'Terlalu banyak lamaran hari ini. Coba lagi besok.' }, 429);
+  }
+
   const { error } = await db.from('party_applications').insert({
     party_id,
     user_id: userId,

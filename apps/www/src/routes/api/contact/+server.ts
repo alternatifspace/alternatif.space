@@ -4,10 +4,43 @@ import { env } from '$env/dynamic/private';
 export const prerender = false;
 
 const RESEND = 'https://api.resend.com/emails';
+const TURNSTILE_VERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 const MAX_NAME = 100;
 const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
+
+// HTML-escape for safe interpolation into the notification email. (The previous
+// code used the deprecated global escape(), which URL-encodes — it mangled
+// legitimate text and is the wrong tool for HTML contexts.)
+function escapeHtml(input: string): string {
+	return input
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+}
+
+// Cloudflare Turnstile (bot protection). No-op until TURNSTILE_SECRET_KEY is
+// set, so local dev and unconfigured deploys keep working (honeypot still
+// applies). Once the secret is set, a valid token becomes mandatory.
+async function turnstileOk(token: unknown, remoteIp: string | null): Promise<boolean> {
+	const secret = env.TURNSTILE_SECRET_KEY;
+	if (!secret) return true;
+	if (typeof token !== 'string' || !token) return false;
+	try {
+		const form = new FormData();
+		form.append('secret', secret);
+		form.append('response', token);
+		if (remoteIp) form.append('remoteip', remoteIp);
+		const res = await fetch(TURNSTILE_VERIFY, { method: 'POST', body: form });
+		const data = (await res.json()) as { success?: boolean };
+		return data.success === true;
+	} catch {
+		return false;
+	}
+}
 
 function validate(body: Record<string, unknown>) {
 	const errors: string[] = [];
@@ -42,6 +75,11 @@ export async function POST({ request }) {
 		return json({ ok: true });
 	}
 
+	const remoteIp = request.headers.get('cf-connecting-ip');
+	if (!(await turnstileOk((body as Record<string, unknown>).turnstileToken, remoteIp))) {
+		return json({ error: 'Verifikasi anti-bot gagal. Muat ulang halaman dan coba lagi.' }, { status: 403 });
+	}
+
 	if (errors.length > 0) {
 		return json({ error: errors.join(' ') }, { status: 400 });
 	}
@@ -63,10 +101,10 @@ export async function POST({ request }) {
 				to: 'sapa@alternatif.space',
 				reply_to: email,
 				subject: `Pesan dari ${name} via alternatif.space`,
-				html: `<p><strong>Nama:</strong> ${escape(name)}</p>
-<p><strong>Email:</strong> ${escape(email)}</p>
+				html: `<p><strong>Nama:</strong> ${escapeHtml(name)}</p>
+<p><strong>Email:</strong> ${escapeHtml(email)}</p>
 <p><strong>Pesan:</strong></p>
-<p>${escape(message).replace(/\n/g, '<br>')}</p>`
+<p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>`
 			})
 		});
 

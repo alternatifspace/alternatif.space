@@ -1,6 +1,7 @@
 import { serviceClient, callerUserId, json, handleOptions } from '../_shared/client.ts';
 import { isAdmin } from '../_shared/membership.ts';
 import { slugify, moveCommentSet } from '../_shared/mufakat.ts';
+import { escapeHtml } from '../_shared/tiptap-html.ts';
 
 // mufakat-admin-spinoff (TRD §9.3, M0-13): admin selects a contiguous reply
 // chain constituting a semantic sub-debate. Triggering comments STAY (unlike
@@ -67,7 +68,7 @@ Deno.serve(async (req) => {
       .insert({
         slug: slugify(threadTitle),
         title: threadTitle,
-        body_html: `<blockquote data-context-block><p>${contextText}</p><p><a href="/diskusi/${sourceThread.slug}">← diskusi asal</a></p></blockquote>`,
+        body_html: `<blockquote data-context-block><p>${escapeHtml(contextText)}</p><p><a href="/diskusi/${encodeURIComponent(sourceThread.slug)}">← diskusi asal</a></p></blockquote>`,
         body_text: contextText,
         op_id: null,                       // admin-stewarded sub-debate, no individual OP
         origin: 'spinoff',

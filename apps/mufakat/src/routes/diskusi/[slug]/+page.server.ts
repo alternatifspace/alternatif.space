@@ -1,19 +1,16 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import { generateHTML } from '@tiptap/html';
-import StarterKit from '@tiptap/starter-kit';
+import { tiptapToHtml } from '@alternatif/ui/tiptap';
 import { supabaseServer } from '$lib/supabase';
 import { invokeEdge } from '$lib/server/edge';
 import type { CommentNodeData, CommentRow, MarkerData, PartyRef, Thread } from '$lib/types';
 import type { ThreadStatus } from '@alternatif/ui';
 import type { Actions, PageServerLoad } from './$types';
 
+// Summary HTML is rendered from the trusted JSON via the shared safe
+// serializer — never from a stored/client HTML string (prevents stored XSS;
+// @tiptap/html would emit `javascript:` link hrefs verbatim).
 function tiptapHtml(json: unknown): string | null {
-	if (!json) return null;
-	try {
-		return generateHTML(json as object, [StarterKit]);
-	} catch {
-		return null;
-	}
+	return tiptapToHtml(json);
 }
 
 // Thread page (M0-04, TRD §11): interleaves three positionally anchored row
@@ -291,7 +288,9 @@ export const actions: Actions = {
 		} catch {
 			return fail(400, { error: 'invalid_content' });
 		}
-		const html = (form.get('html') as string) || null;
+		// Display HTML is re-derived from the trusted JSON, never the client's
+		// `html` field (prevents stored XSS via a forged form post).
+		const html = tiptapToHtml(content);
 		const text = (form.get('text') as string) || null;
 
 		const db = supabaseServer(event);

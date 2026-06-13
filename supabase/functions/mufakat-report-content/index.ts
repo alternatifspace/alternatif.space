@@ -39,6 +39,28 @@ Deno.serve(async (req) => {
   const { data: subject } = await db.from(table).select('id').eq('id', subject_id).maybeSingle();
   if (!subject) return json({ error: 'subject_not_found' }, 404);
 
+  // Anti-spam: one report per user per subject — repeats are idempotent so a
+  // bot can't inflate a report count by re-submitting.
+  const { data: dup } = await db
+    .from('mufakat_reports')
+    .select('id')
+    .eq('subject_type', subject_type)
+    .eq('subject_id', subject_id)
+    .eq('reported_by', userId)
+    .maybeSingle();
+  if (dup) return json({ ok: true, confirmation: CATEGORY_PEDAGOGY[category] });
+
+  // Daily cap across all subjects — blunts mass report-flooding.
+  const dayAgo = new Date(Date.now() - 24 * 3600_000).toISOString();
+  const { count } = await db
+    .from('mufakat_reports')
+    .select('id', { count: 'exact', head: true })
+    .eq('reported_by', userId)
+    .gte('created_at', dayAgo);
+  if ((count ?? 0) >= 50) {
+    return json({ error: 'rate_limited', explanation: 'Terlalu banyak laporan hari ini. Coba lagi besok.' }, 429);
+  }
+
   const { error } = await db.from('mufakat_reports').insert({
     subject_type,
     subject_id,
