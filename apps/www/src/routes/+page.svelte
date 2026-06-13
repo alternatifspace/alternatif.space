@@ -110,17 +110,17 @@
 			{/if}
 		</div>
 
-		<div class="relative my-auto py-12">
+		<div class="relative my-auto py-6">
 			<!-- belonging before rigor (soul §2.1) -->
 			<p class="lp-mono text-sm tracking-[0.18em] uppercase">
 				Capek cuma jadi penonton? <span class="lp-amber-bg">Kamu nggak sendirian.</span>
 			</p>
-			<h1 class="lp-display mt-4">
+			<div class="grid items-start gap-10 lg:grid-cols-[1fr_minmax(20rem,26rem)]">
+				<div>
+					<h1 class="lp-display mt-4">
 				Demokrasi<br />
 				itu <span class="lp-underline">otot.</span>
 			</h1>
-			<div class="mt-10 grid items-start gap-10 lg:grid-cols-[1fr_minmax(20rem,26rem)]">
-				<div>
 					<p class="max-w-md text-lg leading-snug font-medium">
 						Nggak cukup dihafal — harus dilatih. Dirikan partai, angkat posisimu, adu argumen
 						lintas-bendera. Ini ruang latihannya.
@@ -292,7 +292,7 @@
 					{#if segera}<span class="opacity-50">{name}</span>{:else}<a href={url} class="lp-link">{name}</a>{/if}
 				{/each}
 			</span>
-			<span class="opacity-50">kontak — segera</span>
+			<a href="/contribute" class="lp-link">kontribusi</a>
 		</div>
 	</footer>
 </div>

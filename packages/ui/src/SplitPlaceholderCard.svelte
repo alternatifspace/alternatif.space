@@ -22,13 +22,14 @@
 
 <a
 	{href}
-	class="block rounded-lg border border-dashed border-gray-300 bg-gray-50 p-3 hover:border-gray-400 hover:bg-gray-100"
+	class="block border border-dashed p-3 hover:bg-[#141210]/[0.03]"
+	style="border-color: var(--lp-ink)"
 >
-	<p class="line-clamp-2 text-sm text-gray-600 italic">{excerpt}</p>
+	<p class="line-clamp-2 text-sm italic opacity-70">{excerpt}</p>
 	<div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
-		<span class="font-medium text-blue-700">→ kini diskusi tersendiri</span>
+		<span class="lp-amber font-medium">→ kini diskusi tersendiri</span>
 		<ThreadStatusBadge {status} />
-		<span class="ml-auto text-xs text-gray-500">
+		<span class="ml-auto text-xs opacity-60">
 			{reactionCount} × pertanyaan bagus
 		</span>
 	</div>

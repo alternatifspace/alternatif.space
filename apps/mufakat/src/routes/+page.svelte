@@ -61,8 +61,8 @@
 </svelte:head>
 
 {#if data.signedIn}
-	<main class="mx-auto max-w-3xl p-4">
-		<h1 class="text-2xl font-bold">Diskusi</h1>
+	<main class="mx-auto max-w-3xl px-5 py-10">
+		<h1 class="lp-display-sm">Diskusi</h1>
 		<ThreadFeed threads={data.threads} />
 	</main>
 {:else}

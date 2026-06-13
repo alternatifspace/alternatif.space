@@ -33,26 +33,26 @@
 	<!-- Spin-off marker (6.6): label + link + LIVE status badge. When the
 	     target is selesai, the summary-back block renders inline (M0-15) —
 	     read live, never stored in this thread. -->
-	<aside class="rounded-lg border border-indigo-200 bg-indigo-50 p-3">
+	<aside class="border-l-4 p-3" style="border-color: var(--lp-amber)">
 		<div class="flex flex-wrap items-center gap-2 text-sm">
-			<span class="font-medium text-indigo-900">
+			<span class="font-medium">
 				{marker.kind === 'spinoff' ? 'Dipisah jadi diskusi tersendiri:' : 'Sudah ada diskusinya:'}
 			</span>
 			{#if marker.target}
-				<a href="/diskusi/{marker.target.slug}" class="font-semibold text-indigo-800 underline">
+				<a href="/diskusi/{marker.target.slug}" class="lp-link lp-amber font-semibold">
 					{marker.label ?? marker.target.title}
 				</a>
 				<ThreadStatusBadge status={marker.target.status} />
 			{/if}
 		</div>
 		{#if marker.target?.closing_summary_html}
-			<div class="mt-3 rounded-md border border-indigo-100 bg-white p-3">
-				<p class="text-xs font-semibold tracking-wide text-indigo-700 uppercase">Ringkasan penutup</p>
+			<div class="mt-3 border p-3" style="border-color: var(--lp-ink)">
+				<p class="lp-mono text-xs font-bold tracking-[0.15em] uppercase opacity-60">Ringkasan penutup</p>
 				<div class="prose prose-sm prose-slate mt-1 max-w-none">
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html marker.target.closing_summary_html}
 				</div>
-				<a href="/diskusi/{marker.target.slug}" class="mt-2 inline-block text-xs text-indigo-700 underline">
+				<a href="/diskusi/{marker.target.slug}" class="lp-link lp-amber mt-2 inline-block text-xs">
 					Tidak setuju dengan ringkasan ini? Diskusikan di sana →
 				</a>
 			</div>
@@ -64,55 +64,55 @@
 	<title>{thread.hidden ? '[disembunyikan moderator]' : thread.title} — mufakat.alternatif.space</title>
 </svelte:head>
 
-<main class="mx-auto max-w-3xl p-4 pb-16">
+<main class="mx-auto max-w-3xl px-5 py-10 pb-16">
 	{#if form?.reportConfirmation}
-		<div class="mb-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-900">
-			<p class="font-semibold">Laporan terkirim.</p>
+		<div class="mb-4 border-2 p-3 text-sm" style="border-color: var(--lp-ink)" role="status" aria-live="polite">
+			<p class="lp-mono text-xs font-bold tracking-[0.15em] uppercase"><span class="lp-amber">·</span> Laporan terkirim</p>
 			<p class="mt-1">{form.reportConfirmation}</p>
 		</div>
 	{/if}
 	{#if form?.flagged}
-		<div class="mb-4 rounded-md border border-indigo-200 bg-indigo-50 p-3 text-sm text-indigo-900">
+		<div class="mb-4 border-2 p-3 text-sm" style="border-color: var(--lp-ink)" role="status" aria-live="polite">
 			Ditandai sebagai perdebatan definisi — admin akan meninjau apakah perlu dipisah.
 		</div>
 	{/if}
 	{#if form?.error}
-		<div class="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-900">
+		<div class="mb-4 border-2 p-3 text-sm" style="border-color: var(--lp-ink)" role="alert" aria-live="polite">
 			{form.explanation ?? form.error}
 		</div>
 	{/if}
 
 	{#if thread.hidden}
-		<h1 class="text-xl font-bold text-gray-400 italic">[disembunyikan moderator]</h1>
-		<p class="mt-2 text-sm text-gray-500">Konten diskusi ini disembunyikan. Strukturnya dipertahankan.</p>
+		<h1 class="lp-h2 italic opacity-50">[disembunyikan moderator]</h1>
+		<p class="mt-2 text-sm opacity-60">Konten diskusi ini disembunyikan. Strukturnya dipertahankan.</p>
 	{:else}
 		{#if thread.status === 'dialihkan' && data.redirectTarget}
 			<!-- Permanent redirect to the canonical thread (M0-02) -->
-			<div class="mb-4 rounded-md border border-gray-300 bg-gray-100 p-3 text-sm">
+			<div class="mb-4 border-2 p-3 text-sm" style="border-color: var(--lp-ink)">
 				Diskusi ini ditutup sebagai duplikat. Diskusi kanoniknya:
-				<a href="/diskusi/{data.redirectTarget.slug}" class="font-semibold underline">{data.redirectTarget.title}</a>
+				<a href="/diskusi/{data.redirectTarget.slug}" class="lp-link lp-amber font-semibold">{data.redirectTarget.title}</a>
 			</div>
 		{/if}
 
 		{#if data.opPrompt}
 			<!-- OP-ship window (M0-09/D2): the split already happened; only the
 			     responsibility is being decided. -->
-			<div class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
-				<p class="font-semibold text-amber-900">Komentarmu jadi diskusi baru.</p>
-				<p class="mt-1 text-sm text-amber-800">
+			<div class="mb-4 border-l-4 p-4" style="border-color: var(--lp-amber)">
+				<p class="font-semibold">Komentarmu jadi diskusi baru.</p>
+				<p class="mt-1 text-sm opacity-80">
 					Komunitas menilai pertanyaanmu layak jadi diskusi tersendiri. Mau jadi OP-nya? Tanpa
 					respons, OP-ship dikonfirmasi otomatis dalam 24 jam.
 				</p>
 				<div class="mt-3 flex gap-2">
 					<form method="POST" action="?/opship" use:enhance>
 						<input type="hidden" name="split_id" value={data.opPrompt.split_id} />
-						<button name="decision" value="confirm" class="min-h-10 rounded-md bg-slate-800 px-4 text-sm font-semibold text-white">
+						<button name="decision" value="confirm" class="lp-btn inline-block text-sm">
 							Ya, saya jadi OP
 						</button>
 					</form>
 					<form method="POST" action="?/opship" use:enhance>
 						<input type="hidden" name="split_id" value={data.opPrompt.split_id} />
-						<button name="decision" value="decline" class="min-h-10 rounded-md border border-amber-400 px-4 text-sm font-medium text-amber-900">
+						<button name="decision" value="decline" class="lp-btn-ghost inline-block text-sm">
 							Tidak — biarkan komunitas
 						</button>
 					</form>
@@ -123,20 +123,20 @@
 		<!-- Thread header (6.8): status prominent, OP flag, timestamp -->
 		<header>
 			<div class="flex items-start justify-between gap-3">
-				<h1 class="text-2xl font-bold">{thread.title}</h1>
+				<h1 class="lp-display-sm">{thread.title}</h1>
 				<ThreadStatusBadge status={thread.status} />
 			</div>
-			<div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
-				{#if data.opName}<span class="font-medium text-gray-700">{data.opName}</span>{/if}
+			<div class="mt-3 flex flex-wrap items-center gap-2 text-sm opacity-60">
+				{#if data.opName}<span class="font-medium opacity-100">{data.opName}</span>{/if}
 				<PartyBadge party={data.opParty} partaiBaseUrl={PARTAI_URL} />
 				{#if thread.community_raised}
-					<span class="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">
+					<span class="lp-mono border px-2 py-0.5 text-xs tracking-[0.12em] uppercase" style="border-color: var(--lp-ink)">
 						Diangkat komunitas
 					</span>
 				{/if}
 				<span>{formatRelativeDays(thread.created_at)}</span>
 				{#if data.parentThread}
-					<a href="/diskusi/{data.parentThread.slug}" class="text-xs underline">
+					<a href="/diskusi/{data.parentThread.slug}" class="lp-link text-xs">
 						← dari diskusi: {data.parentThread.title}
 					</a>
 				{/if}
@@ -144,7 +144,7 @@
 		</header>
 
 		{#if thread.status === 'pertanyaan_terbuka'}
-			<div class="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+			<div class="mt-4 border-l-4 p-3 text-sm" style="border-color: var(--lp-amber)">
 				Pertanyaan ini masih terbuka, dan kamu bukan yang pertama menemukannya.
 			</div>
 		{/if}
@@ -156,8 +156,10 @@
 		</div>
 
 		{#if thread.closing_summary_html}
-			<section class="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
-				<p class="text-xs font-semibold tracking-wide text-blue-700 uppercase">Ringkasan penutup</p>
+			<section class="mt-6 border-2 p-4" style="border-color: var(--lp-ink)">
+				<p class="lp-mono text-xs font-bold tracking-[0.15em] uppercase opacity-60">
+					<span class="lp-amber">·</span> Ringkasan penutup
+				</p>
 				<div class="prose prose-sm prose-slate mt-1 max-w-none">
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html thread.closing_summary_html}
@@ -172,14 +174,14 @@
 				<button
 					disabled={!data.canWrite}
 					class="min-h-10 rounded-full border px-4 font-medium disabled:opacity-40 {data.myThreadSetuju
-						? 'border-slate-800 bg-slate-800 text-white'
-						: 'border-gray-300 text-gray-700 hover:bg-gray-50'}"
+						? 'border-[#141210] bg-[#141210] text-[#f4f1ea]'
+						: 'border-[#141210] hover:bg-[#141210]/5'}"
 				>
 					Setuju{data.threadSetuju > 0 ? ` · ${data.threadSetuju}` : ''}
 				</button>
 			</form>
 			{#if data.userId && !data.isOP}
-				<button type="button" class="text-xs text-gray-400 hover:underline" onclick={() => (reportingThread = !reportingThread)}>
+				<button type="button" class="text-xs opacity-50 hover:underline" onclick={() => (reportingThread = !reportingThread)}>
 					Laporkan diskusi
 				</button>
 			{/if}
@@ -189,31 +191,31 @@
 			<form method="POST" action="?/report" use:enhance={() => async ({ update }) => {
 				reportingThread = false;
 				await update();
-			}} class="mt-2 flex max-w-md flex-col gap-2 rounded-md bg-gray-50 p-3">
+			}} class="mt-2 flex max-w-md flex-col gap-2 border p-3" style="border-color: var(--lp-ink)">
 				<input type="hidden" name="subject_type" value="thread" />
 				<input type="hidden" name="subject_id" value={thread.id} />
-				<select name="category" required class="min-h-10 rounded-md border border-gray-300 px-2 text-sm">
+				<select name="category" required class="min-h-10 border-2 bg-transparent px-2 text-sm" style="border-color: var(--lp-ink)">
 					<option value="" disabled selected>— kategori laporan —</option>
 					<option value="sara">SARA / ujaran kebencian</option>
 					<option value="defamation">Pencemaran nama baik</option>
 					<option value="threat">Ancaman</option>
 					<option value="spam">Spam</option>
 				</select>
-				<textarea name="note" maxlength="500" rows="2" placeholder="Catatan (opsional)" class="rounded-md border border-gray-300 px-3 py-2 text-sm"></textarea>
-				<button class="min-h-10 self-start rounded-md bg-slate-800 px-4 text-sm font-semibold text-white">Kirim laporan</button>
+				<textarea name="note" maxlength="500" rows="2" placeholder="Catatan (opsional)" class="border-2 bg-transparent px-3 py-2 text-sm" style="border-color: var(--lp-ink)"></textarea>
+				<button class="lp-btn inline-block self-start text-sm">Kirim laporan</button>
 			</form>
 		{/if}
 
 		<!-- OP/admin: close thread (M0-03); admin: merge duplicate (M0-02) -->
 		{#if (data.isOP || data.isAdmin) && thread.status === 'aktif'}
-			<section class="mt-6 rounded-lg border border-gray-200 p-4">
+			<section class="mt-6 border-2 p-4" style="border-color: var(--lp-ink)">
 				{#if !closing && !merging}
 					<div class="flex flex-wrap gap-2">
-						<button type="button" class="min-h-10 rounded-md border border-gray-300 px-4 text-sm font-medium" onclick={() => (closing = true)}>
+						<button type="button" class="lp-btn-ghost inline-block text-sm" onclick={() => (closing = true)}>
 							Tutup diskusi
 						</button>
 						{#if data.isAdmin}
-							<button type="button" class="min-h-10 rounded-md border border-gray-300 px-4 text-sm font-medium" onclick={() => (merging = true)}>
+							<button type="button" class="lp-btn-ghost inline-block text-sm" onclick={() => (merging = true)}>
 								Gabungkan sebagai duplikat
 							</button>
 						{/if}
@@ -237,34 +239,34 @@
 								submitLabel="Tutup: Selesai"
 								oncancel={() => (closing = false)}
 							/>
-							<p class="-mt-1 text-xs text-gray-400">Editor di atas menjadi ringkasan penutup (closing_summary).</p>
+							<p class="-mt-1 text-xs opacity-50">Editor di atas menjadi ringkasan penutup (closing_summary).</p>
 						{:else}
 							<form method="POST" action="?/close" use:enhance class="flex gap-2">
 								<input type="hidden" name="status" value="pertanyaan_terbuka" />
-								<button class="min-h-10 rounded-md bg-amber-600 px-4 text-sm font-semibold text-white">
+								<button class="lp-btn inline-block text-sm">
 									Tutup: Pertanyaan Terbuka
 								</button>
-								<button type="button" class="min-h-10 rounded-md border border-gray-300 px-4 text-sm" onclick={() => (closing = false)}>
+								<button type="button" class="lp-btn-ghost inline-block text-sm" onclick={() => (closing = false)}>
 									Batal
 								</button>
 							</form>
 						{/if}
-						{#if form?.closeError}<p class="text-sm text-red-600">{form.closeError}</p>{/if}
+						{#if form?.closeError}<p class="border-2 px-3 py-2 text-sm" style="border-color: var(--lp-ink)" role="alert" aria-live="polite">{form.closeError}</p>{/if}
 					</div>
 				{/if}
 
 				{#if merging}
 					<form method="POST" action="?/merge" use:enhance class="flex flex-col gap-2">
-						<label class="text-sm font-medium" for="canonical">ID diskusi kanonik</label>
-						<input id="canonical" name="canonical_thread_id" required placeholder="UUID diskusi tujuan" class="min-h-10 rounded-md border border-gray-300 px-3 text-sm" />
+						<label class="lp-mono text-xs font-bold tracking-[0.2em] uppercase" for="canonical">ID diskusi kanonik</label>
+						<input id="canonical" name="canonical_thread_id" required placeholder="UUID diskusi tujuan" class="min-h-10 border-2 bg-transparent px-3 text-sm" style="border-color: var(--lp-ink)" />
 						<label class="flex items-center gap-2 text-sm">
 							<input type="checkbox" name="move_comments" /> Pindahkan komentar ke diskusi kanonik
 						</label>
 						<div class="flex gap-2">
-							<button class="min-h-10 rounded-md bg-slate-800 px-4 text-sm font-semibold text-white">Gabungkan</button>
-							<button type="button" class="min-h-10 rounded-md border border-gray-300 px-4 text-sm" onclick={() => (merging = false)}>Batal</button>
+							<button class="lp-btn inline-block text-sm">Gabungkan</button>
+							<button type="button" class="lp-btn-ghost inline-block text-sm" onclick={() => (merging = false)}>Batal</button>
 						</div>
-						{#if form?.mergeError}<p class="text-sm text-red-600">{form.mergeError}</p>{/if}
+						{#if form?.mergeError}<p class="border-2 px-3 py-2 text-sm" style="border-color: var(--lp-ink)" role="alert" aria-live="polite">{form.mergeError}</p>{/if}
 					</form>
 				{/if}
 			</section>
@@ -272,14 +274,16 @@
 
 		<!-- Comments + markers, positionally interleaved (TRD §11) -->
 		<section class="mt-8 flex flex-col gap-3">
-			<h2 class="text-sm font-semibold tracking-wide text-gray-500 uppercase">Komentar</h2>
+			<h2 class="lp-mono text-xs font-bold tracking-[0.25em] uppercase opacity-60">
+				<span class="lp-amber">·</span> Komentar
+			</h2>
 
 			{#each markersByAnchor.get(null) ?? [] as marker (marker.id)}
 				{@render markerBlock(marker)}
 			{/each}
 
 			{#if data.roots.length === 0}
-				<p class="text-sm text-gray-500">Belum ada komentar — jadilah yang pertama menanggapi.</p>
+				<p class="text-sm opacity-60">Belum ada komentar — jadilah yang pertama menanggapi.</p>
 			{/if}
 
 			{#each data.roots as node (node.id)}
@@ -296,20 +300,21 @@
 					{:else}
 						<button
 							type="button"
-							class="min-h-11 rounded-md border border-gray-300 px-4 text-left text-sm text-gray-500 hover:bg-gray-50"
+							class="min-h-11 border-2 px-4 text-left text-sm opacity-60 hover:bg-[#141210]/5 hover:opacity-100"
+							style="border-color: var(--lp-ink)"
 							onclick={() => (composing = true)}
 						>
 							Tulis komentar…
 						</button>
 					{/if}
 				{:else if !data.signedIn}
-					<p class="text-sm text-gray-500">
-						<a href={partaiGate()} class="underline">Bergabunglah dengan partai</a> untuk ikut berdiskusi.
+					<p class="text-sm opacity-70">
+						<a href={partaiGate()} class="lp-link lp-amber">Bergabunglah dengan partai</a> untuk ikut berdiskusi.
 					</p>
 				{:else}
-					<p class="text-sm text-gray-500">
+					<p class="text-sm opacity-70">
 						Kamu butuh keanggotaan partai untuk menulis —
-						<a href={partaiGate()} class="underline">pasang benderamu di partai</a>.
+						<a href={partaiGate()} class="lp-link lp-amber">pasang benderamu di partai</a>.
 					</p>
 				{/if}
 			{/if}

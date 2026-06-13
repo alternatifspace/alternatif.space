@@ -20,21 +20,21 @@
 	<meta name="description" content="Log publik tindakan moderasi mufakat.alternatif.space — jenis tindakan dan tanggal." />
 </svelte:head>
 
-<main class="mx-auto max-w-3xl p-4 pb-16">
-	<h1 class="text-2xl font-bold">Log moderasi</h1>
-	<p class="mt-1 text-sm text-gray-500">
+<main class="mx-auto max-w-3xl px-5 py-10 pb-16">
+	<h1 class="lp-display-sm">Log moderasi</h1>
+	<p class="mt-2 text-sm opacity-60">
 		Setiap tindakan moderasi tercatat di sini: jenis tindakan dan tanggal. Identitas pelapor
 		dan moderator tidak pernah ditampilkan.
 	</p>
 
 	{#if data.entries.length === 0}
-		<p class="mt-8 text-sm text-gray-500">Belum ada tindakan moderasi.</p>
+		<p class="mt-8 text-sm opacity-60">Belum ada tindakan moderasi.</p>
 	{:else}
-		<ul class="mt-6 flex flex-col divide-y divide-gray-100">
+		<ul class="mt-6 flex flex-col divide-y divide-[#141210]/15 border-y-2" style="border-color: var(--lp-ink)">
 			{#each data.entries as entry (entry.id)}
 				<li class="flex items-baseline justify-between gap-4 py-2.5 text-sm">
-					<span class="text-gray-800">{ACTION_LABELS[entry.action] ?? entry.action}</span>
-					<time class="shrink-0 text-xs text-gray-400" datetime={entry.created_at}>
+					<span>{ACTION_LABELS[entry.action] ?? entry.action}</span>
+					<time class="shrink-0 text-xs opacity-50" datetime={entry.created_at}>
 						{dateFormat.format(new Date(entry.created_at))}
 					</time>
 				</li>

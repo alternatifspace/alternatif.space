@@ -82,9 +82,9 @@
 	<title>Buat diskusi — Mufakat</title>
 </svelte:head>
 
-<main class="mx-auto max-w-3xl p-4">
-	<h1 class="text-2xl font-bold">Buat diskusi</h1>
-	<p class="mt-1 text-sm text-gray-500">Satu pertanyaan, satu rumah.</p>
+<main class="mx-auto max-w-3xl px-5 py-10">
+	<h1 class="lp-display-sm">Buat diskusi</h1>
+	<p class="mt-2 text-sm opacity-60">Satu pertanyaan, satu rumah.</p>
 
 	<form
 		method="POST"
@@ -99,7 +99,7 @@
 		}}
 	>
 		<div>
-			<label for="title" class="text-sm font-medium text-gray-700">Judul</label>
+			<label for="title" class="lp-mono text-xs font-bold tracking-[0.2em] uppercase">Judul</label>
 			<input
 				id="title"
 				name="title"
@@ -109,37 +109,40 @@
 				bind:value={title}
 				oninput={onTitleInput}
 				placeholder="Pertanyaan atau topik yang ingin kamu angkat"
-				class="mt-1 min-h-11 w-full rounded-md border border-gray-300 px-3 text-base focus:border-slate-500 focus:outline-none"
+				class="mt-1 min-h-11 w-full border-2 bg-transparent px-3 text-base focus:outline-none"
+				style="border-color: var(--lp-ink)"
 			/>
-			<p class="mt-1 text-right text-xs text-gray-400">{title.length}/200</p>
+			<p class="mt-1 text-right text-xs opacity-50">{title.length}/200</p>
 		</div>
 
 		{#if suggestions.length > 0}
 			<!-- Dedup as invitation, not block (M0-02): tap opens the thread,
 			     the user can always proceed. -->
-			<div class="rounded-md border border-amber-200 bg-amber-50 p-3">
-				<p class="text-sm font-medium text-amber-900">Diskusi ini mungkin sudah ada:</p>
+			<div class="border-2 p-3" style="border-color: var(--lp-ink)">
+				<p class="lp-mono text-xs font-bold tracking-[0.15em] uppercase">
+					<span class="lp-amber">·</span> Diskusi ini mungkin sudah ada
+				</p>
 				<ul class="mt-2 flex flex-col gap-1.5">
 					{#each suggestions as s (s.id)}
 						<li>
 							<a
 								href="/diskusi/{s.slug}"
-								class="flex items-center justify-between gap-2 rounded px-2 py-1.5 text-sm text-slate-800 hover:bg-amber-100"
+								class="flex items-center justify-between gap-2 px-2 py-1.5 text-sm hover:bg-[#141210]/5"
 							>
-								<span class="underline">{s.title}</span>
+								<span class="lp-link">{s.title}</span>
 								<ThreadStatusBadge status={s.status} />
 							</a>
 						</li>
 					{/each}
 				</ul>
-				<p class="mt-2 text-xs text-amber-800">
+				<p class="mt-2 text-xs opacity-70">
 					Kalau pertanyaanmu memang berbeda, lanjutkan saja — kamu tetap bisa membuat diskusi baru.
 				</p>
 			</div>
 		{/if}
 
 		<div>
-			<span class="text-sm font-medium text-gray-700">Isi</span>
+			<span class="lp-mono text-xs font-bold tracking-[0.2em] uppercase">Isi</span>
 			{#if ready}
 				{#await import('$lib/components/RichEditor.svelte') then { default: RichEditor }}
 					<div class="mt-1">
@@ -158,7 +161,7 @@
 		</div>
 
 		{#if form?.error}
-			<div class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+			<div class="border-2 p-3 text-sm" style="border-color: var(--lp-ink)" role="alert" aria-live="polite">
 				{#if form.explanation}
 					{form.explanation}
 				{:else if form.error === 'party_membership_required'}
@@ -176,7 +179,7 @@
 			<button
 				type="submit"
 				disabled={!title.trim() || submitting}
-				class="min-h-11 rounded-md bg-slate-800 px-6 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-40"
+				class="lp-btn inline-block disabled:opacity-40"
 			>
 				{submitting ? 'Menerbitkan…' : 'Terbitkan diskusi'}
 			</button>

@@ -10,7 +10,7 @@
 
 <button
 	type="button"
-	class="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100"
+	class="relative inline-flex h-11 w-11 items-center justify-center rounded-full hover:bg-[#141210]/5"
 	aria-label={count > 0 ? `Notifikasi, ${count} belum dibaca` : 'Notifikasi'}
 	{onclick}
 >
@@ -23,7 +23,7 @@
 	</svg>
 	{#if count > 0}
 		<span
-			class="absolute top-1 right-1 inline-flex min-w-4.5 items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-bold text-white"
+			class="absolute top-1 right-1 inline-flex min-w-4.5 items-center justify-center rounded-full bg-[#c17d0f] px-1 text-[11px] font-bold text-white"
 		>
 			{count > 99 ? '99+' : count}
 		</span>

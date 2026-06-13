@@ -244,6 +244,51 @@
 	white-space: nowrap;
 }
 
+/* browse card — poster tile with a hard ink-shadow lift on hover (jelajah grid) */
+.lp-card {
+	border: 1px solid var(--lp-ink);
+	background: var(--lp-bone);
+	transition:
+		transform 0.12s ease,
+		box-shadow 0.12s ease;
+}
+.lp-card:hover {
+	transform: translate(-2px, -2px);
+	box-shadow: 4px 4px 0 0 var(--lp-ink);
+}
+
+/* sharp mono tag — membership model, activity status (replaces rounded pills) */
+.lp-tag {
+	display: inline-flex;
+	align-items: center;
+	font-family: 'Space Grotesk Variable', sans-serif;
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	border: 1px solid var(--lp-ink);
+	padding: 0.12rem 0.5rem;
+}
+.lp-tag-amber {
+	border-color: var(--lp-amber);
+	color: var(--lp-amber);
+}
+.lp-tag-muted {
+	border-color: rgba(20, 18, 16, 0.35);
+	opacity: 0.6;
+}
+
+/* flat ink-bordered form field — search, select (no rounded chrome) */
+.lp-field {
+	border: 1px solid var(--lp-ink);
+	background: rgba(255, 255, 255, 0.55);
+	font-family: 'Space Grotesk Variable', sans-serif;
+	color: var(--lp-ink);
+}
+.lp-field:focus {
+	outline: 2px solid var(--lp-amber);
+	outline-offset: -1px;
+}
+
 /* reveal — progressive enhancement only */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
 	.lp-reveal {

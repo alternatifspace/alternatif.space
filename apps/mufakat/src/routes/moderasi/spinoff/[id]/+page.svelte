@@ -26,20 +26,20 @@
 	<title>Spin-off — Moderasi</title>
 </svelte:head>
 
-<main class="mx-auto max-w-3xl p-4 pb-16">
-	<a href="/moderasi" class="text-sm text-gray-500 hover:underline">← Moderasi</a>
-	<h1 class="mt-2 text-2xl font-bold">Spin-off sub-debat</h1>
-	<p class="mt-1 text-sm text-gray-600">
-		Dari <a href="/diskusi/{data.thread.slug}" class="underline">{data.thread.title}</a>
+<main class="mx-auto max-w-3xl px-5 py-10 pb-16">
+	<a href="/moderasi" class="lp-link lp-amber text-sm">← Moderasi</a>
+	<h1 class="lp-display-sm mt-3">Spin-off sub-debat</h1>
+	<p class="mt-2 text-sm opacity-70">
+		Dari <a href="/diskusi/{data.thread.slug}" class="lp-link">{data.thread.title}</a>
 	</p>
-	<p class="mt-2 text-sm text-gray-500">
+	<p class="mt-2 text-sm opacity-60">
 		Pilih rantai balasan yang membentuk sub-debat. Komentar pemicu tetap di tempat;
 		balasan yang dipilih dipindahkan. Jika sudah ada diskusi kanonik untuk konsep yang
 		diperdebatkan, balasan dipindahkan ke sana.
 	</p>
 
 	{#if form?.error}
-		<div class="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-900">
+		<div class="mt-4 border-2 p-3 text-sm" style="border-color: var(--lp-ink)" role="alert" aria-live="polite">
 			{form.error === 'invalid_selection'
 				? 'Pilihan tidak valid — semua komentar terpilih harus masih terlihat.'
 				: form.error}
@@ -47,7 +47,7 @@
 	{/if}
 
 	{#if data.rows.length === 0}
-		<p class="mt-8 text-sm text-gray-500">Diskusi ini belum punya komentar.</p>
+		<p class="mt-8 text-sm opacity-60">Diskusi ini belum punya komentar.</p>
 	{:else}
 		<form
 			method="POST"
@@ -64,9 +64,10 @@
 				{#each data.rows as row (row.id)}
 					<li style="margin-left: {row.depth * 1.25}rem">
 						<label
-							class="flex items-start gap-2 rounded-md border p-2.5 {selected.has(row.id)
-								? 'border-indigo-400 bg-indigo-50'
-								: 'border-gray-200 bg-white'} {row.state !== 'visible' ? 'opacity-50' : ''}"
+							class="flex items-start gap-2 border-2 p-2.5 {selected.has(row.id)
+								? 'bg-[#c17d0f]/[0.08]'
+								: ''} {row.state !== 'visible' ? 'opacity-50' : ''}"
+							style="border-color: var(--lp-ink)"
 						>
 							<input
 								type="checkbox"
@@ -76,11 +77,11 @@
 								onchange={() => toggle(row.id)}
 							/>
 							<div class="min-w-0 text-sm">
-								<p class="text-xs text-gray-500">
-									<span class="font-medium text-gray-700">{row.author_name}</span>
+								<p class="text-xs opacity-60">
+									<span class="font-medium opacity-100">{row.author_name}</span>
 									· {formatRelativeDays(row.created_at)}
 									{#if row.id === data.dari}
-										<span class="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-amber-800">pemicu</span>
+										<span class="lp-mono lp-amber ml-1 border px-2 py-0.5 tracking-[0.12em] uppercase" style="border-color: var(--lp-amber)">pemicu</span>
 									{/if}
 								</p>
 								{#if row.state === 'visible'}
@@ -89,7 +90,7 @@
 										{@html row.html ?? ''}
 									</div>
 								{:else}
-									<p class="mt-1 text-gray-400 italic">
+									<p class="mt-1 italic opacity-50">
 										[{row.state === 'moved' ? 'sudah dipindahkan' : row.state === 'deleted' ? 'dihapus' : 'disembunyikan'}]
 									</p>
 								{/if}
@@ -99,9 +100,9 @@
 				{/each}
 			</ul>
 
-			<div class="rounded-lg border border-gray-200 bg-white p-4">
-				<label for="label" class="text-sm font-medium text-gray-700">
-					Label penanda <span class="text-gray-400">(pertanyaan yang diperdebatkan, satu baris)</span>
+			<div class="border-2 p-4" style="border-color: var(--lp-ink)">
+				<label for="label" class="lp-mono block text-xs font-bold tracking-[0.15em] uppercase">
+					Label penanda <span class="opacity-50">(pertanyaan yang diperdebatkan, satu baris)</span>
 				</label>
 				<input
 					id="label"
@@ -111,11 +112,12 @@
 					maxlength={200}
 					bind:value={label}
 					placeholder="Apa yang dimaksud dengan …?"
-					class="mt-1 min-h-11 w-full rounded-md border border-gray-300 px-3 text-base focus:border-slate-500 focus:outline-none"
+					class="mt-1 min-h-11 w-full border-2 bg-transparent px-3 text-base focus:outline-none"
+					style="border-color: var(--lp-ink)"
 				/>
 
-				<label for="title" class="mt-3 block text-sm font-medium text-gray-700">
-					Judul diskusi baru <span class="text-gray-400">(opsional — default: label)</span>
+				<label for="title" class="lp-mono mt-3 block text-xs font-bold tracking-[0.15em] uppercase">
+					Judul diskusi baru <span class="opacity-50">(opsional — default: label)</span>
 				</label>
 				<input
 					id="title"
@@ -123,7 +125,8 @@
 					type="text"
 					maxlength={200}
 					bind:value={title}
-					class="mt-1 min-h-11 w-full rounded-md border border-gray-300 px-3 text-base focus:border-slate-500 focus:outline-none"
+					class="mt-1 min-h-11 w-full border-2 bg-transparent px-3 text-base focus:outline-none"
+					style="border-color: var(--lp-ink)"
 				/>
 
 				<input type="hidden" name="comment_ids" value={JSON.stringify([...selected])} />
@@ -131,7 +134,7 @@
 				<button
 					type="submit"
 					disabled={selected.size === 0 || !label.trim() || submitting}
-					class="mt-4 min-h-11 rounded-md bg-indigo-600 px-6 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-40"
+					class="lp-btn mt-4 inline-block disabled:opacity-40"
 				>
 					{submitting ? 'Memproses…' : `Pindahkan ${selected.size} komentar`}
 				</button>

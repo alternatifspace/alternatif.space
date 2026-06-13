@@ -15,6 +15,7 @@ export const load: LayoutServerLoad = async (event) => {
 
 	let user: UserRow | null = null;
 	let membership: CurrentMembership | null = null;
+	let unreadCount = 0;
 
 	if (userId) {
 		const db = supabaseServer(event);
@@ -66,6 +67,14 @@ export const load: LayoutServerLoad = async (event) => {
 					await db.from('parties').update({ leader_last_active_at: now }).eq('id', membership.party_id);
 				}
 			}
+
+			// Unread notification count drives the navbar bell badge (TRD §12).
+			const { count } = await db
+				.from('notifications')
+				.select('id', { count: 'exact', head: true })
+				.eq('user_id', userId)
+				.is('read_at', null);
+			unreadCount = count ?? 0;
 		}
 	}
 
@@ -73,6 +82,7 @@ export const load: LayoutServerLoad = async (event) => {
 		signedIn: !!userId,
 		user,
 		membership,
+		unreadCount,
 		...buildClerkProps(locals.auth())
 	};
 };

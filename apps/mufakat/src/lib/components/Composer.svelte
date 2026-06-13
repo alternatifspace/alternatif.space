@@ -62,12 +62,12 @@
 			<button
 				type="submit"
 				disabled={empty || submitting}
-				class="min-h-10 rounded-md bg-slate-800 px-5 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-40"
+				class="lp-btn inline-block text-sm disabled:opacity-40"
 			>
 				{submitting ? 'Mengirim…' : submitLabel}
 			</button>
 			{#if oncancel}
-				<button type="button" class="min-h-10 rounded-md border border-gray-300 px-4 text-sm" onclick={oncancel}>
+				<button type="button" class="lp-btn-ghost inline-block text-sm" onclick={oncancel}>
 					Batal
 				</button>
 			{/if}

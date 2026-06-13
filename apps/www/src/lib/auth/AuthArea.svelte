@@ -37,7 +37,7 @@
 {#if signedIn}
 	<a href={PARTAI_URL} class={ctaClass} data-testid="lanjut-ke-partai">Lanjut ke partai →</a>
 {:else}
-	<div class="min-h-96">
+	<div>
 		<SignUp routing="hash" forceRedirectUrl={ONBOARDING_URL} signInUrl="/masuk" {appearance} />
 	</div>
 	<p class={noteClass}>

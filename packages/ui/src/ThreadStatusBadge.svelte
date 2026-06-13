@@ -9,16 +9,20 @@
 	// component never fetches.
 	let { status }: { status: ThreadStatus } = $props();
 
+	// Pamflet × Arena: statuses folded into the ink+amber system. aktif = amber
+	// (the live state); selesai = solid ink stamp (concluded); pertanyaan_terbuka
+	// = ink outline; dialihkan = muted ink outline. Palette literals match
+	// landing.css (--lp-ink #141210, --lp-amber #c17d0f).
 	const STYLES: Record<ThreadStatus, { label: string; classes: string }> = {
-		aktif: { label: 'Aktif', classes: 'bg-green-100 text-green-800' },
-		selesai: { label: 'Selesai', classes: 'bg-blue-100 text-blue-800' },
-		pertanyaan_terbuka: { label: 'Pertanyaan Terbuka', classes: 'bg-amber-100 text-amber-800' },
-		dialihkan: { label: 'Dialihkan', classes: 'bg-gray-200 text-gray-700' }
+		aktif: { label: 'Aktif', classes: 'border border-[#c17d0f] text-[#c17d0f]' },
+		selesai: { label: 'Selesai', classes: 'bg-[#141210] text-[#f4f1ea]' },
+		pertanyaan_terbuka: { label: 'Pertanyaan Terbuka', classes: 'border border-[#141210] text-[#141210]' },
+		dialihkan: { label: 'Dialihkan', classes: 'border border-[#141210] text-[#141210] opacity-50' }
 	};
 </script>
 
 <span
-	class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap {STYLES[
+	class="lp-mono inline-flex items-center px-2 py-0.5 text-xs tracking-[0.12em] whitespace-nowrap uppercase {STYLES[
 		status
 	].classes}"
 >
