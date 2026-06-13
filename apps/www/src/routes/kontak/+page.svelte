@@ -2,6 +2,7 @@
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
 	import { SUBDOMAINS } from '$lib/urls';
+	import '@alternatif/ui/landing.css';
 
 	let name = '';
 	let email = '';
@@ -183,7 +184,7 @@
 				</label>
 
 				{#if status === 'error' && errorMessage}
-					<p class="lp-mono text-sm" style="color: var(--lp-cap)">{errorMessage}</p>
+					<p class="lp-mono text-sm" style="color: var(--lp-amber)">{errorMessage}</p>
 				{/if}
 
 				<button
@@ -215,155 +216,4 @@
 	</footer>
 </div>
 
-<style>
-	.lp {
-		--lp-bone: #f4f1ea;
-		--lp-ink: #141210;
-		--lp-cap: #d4380d;
-		--lp-cap-bone: #ff7a50;
-		--lp-amber: #c17d0f;
-		--lp-amber-hi: #f5a623;
-		background: var(--lp-bone);
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.06 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
-		color: var(--lp-ink);
-		font-family: 'Space Grotesk Variable', sans-serif;
-	}
-	.lp-mono {
-		font-family: 'Space Grotesk Variable', sans-serif;
-	}
-	.lp-amber {
-		color: var(--lp-amber);
-	}
-	.lp-amber-bg {
-		box-shadow: inset 0 -0.45em 0 0 rgba(245, 166, 35, 0.45);
-	}
-	.lp-display {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: clamp(2.6rem, 11vw, 7rem);
-		line-height: 0.98;
-		letter-spacing: -0.01em;
-	}
-	.lp-display-sm {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: clamp(1.8rem, 6vw, 3.2rem);
-		line-height: 1.05;
-	}
-	.lp-h2 {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 1.5rem;
-		line-height: 1.15;
-	}
-	.lp-underline {
-		box-shadow:
-			inset 0 -0.18em 0 0 var(--lp-bone),
-			inset 0 -0.34em 0 0 var(--lp-amber-hi);
-	}
-	.lp-link {
-		text-decoration: underline;
-		text-underline-offset: 4px;
-	}
-	.lp-btn {
-		font-family: 'Archivo Black', sans-serif;
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-		padding: 0.9rem 2.4rem;
-		font-size: 1.05rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		border: none;
-		cursor: pointer;
-	}
-	.lp-btn:hover {
-		background: var(--lp-amber);
-		color: var(--lp-ink);
-	}
-	.lp-btn:disabled {
-		cursor: not-allowed;
-	}
-	.lp-btn-nav {
-		font-family: 'Archivo Black', sans-serif;
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-		padding: 0.5rem 1.1rem;
-		font-size: 0.7rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-	.lp-btn-nav:hover {
-		background: var(--lp-amber);
-		color: var(--lp-ink);
-	}
-	.lp-btn-nav:hover .lp-amber {
-		color: var(--lp-ink);
-	}
 
-	.lp-hero {
-		position: relative;
-	}
-	.lp-halftone {
-		position: absolute;
-		top: -4rem;
-		right: -6rem;
-		width: 34rem;
-		height: 34rem;
-		pointer-events: none;
-		background-image: radial-gradient(rgba(193, 125, 15, 0.5) 1.5px, transparent 1.5px);
-		background-size: 14px 14px;
-		mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent 70%);
-		-webkit-mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent 70%);
-	}
-
-	.lp-tally {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: 1.4rem;
-		border-top: 2px solid var(--lp-ink);
-		padding: 0.8rem 1rem;
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 1.3rem;
-		letter-spacing: 0.25em;
-		color: var(--lp-amber);
-		overflow: hidden;
-		white-space: nowrap;
-	}
-	.lp-tally-group {
-		position: relative;
-	}
-	.lp-tally-strike {
-		position: absolute;
-		left: 0;
-		right: 0;
-		text-align: center;
-		transform: rotate(8deg) scaleX(1.6);
-		color: var(--lp-ink);
-	}
-	.lp-tally-label {
-		font-size: 0.65rem;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
-		color: var(--lp-ink);
-		opacity: 0.6;
-	}
-
-	.lp-stamp {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 0.85rem;
-		letter-spacing: 0.12em;
-		color: var(--lp-cap);
-		border: 3px double var(--lp-cap);
-		border-radius: 4px;
-		padding: 0.35rem 0.8rem;
-		transform: rotate(-6deg);
-		opacity: 0.85;
-		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Cfilter id='r'%3E%3CfeTurbulence baseFrequency='0.6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0.1'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='120' height='40' fill='black' filter='url(%23r)'/%3E%3C/svg%3E");
-		mask-size: cover;
-	}
-
-	.lp-honeypot {
-		position: absolute;
-		left: -9999px;
-		opacity: 0;
-	}
-</style>

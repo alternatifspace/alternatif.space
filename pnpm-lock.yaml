@@ -133,6 +133,9 @@ importers:
 
   apps/www:
     dependencies:
+      '@alternatif/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@fontsource-variable/space-grotesk':
         specifier: ^5.2.4
         version: 5.2.10

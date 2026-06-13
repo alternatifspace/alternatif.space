@@ -5,7 +5,8 @@
 <script lang="ts">
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
-	import { reveal } from '$lib/reveal';
+	import '@alternatif/ui/landing.css';
+	import { reveal } from '@alternatif/ui';
 	import { SUBDOMAINS } from '$lib/urls';
 
 	const quarters = ['Q2 2026', 'Q3 2026', 'Q4 2026', 'Q1 2027', 'Q2 2027', 'H2 2027'] as const;
@@ -448,156 +449,6 @@
 </div>
 
 <style>
-	.lp {
-		--lp-bone: #f4f1ea;
-		--lp-ink: #141210;
-		--lp-cap: #d4380d;
-		--lp-cap-bone: #ff7a50;
-		--lp-amber: #c17d0f;
-		--lp-amber-hi: #f5a623;
-		background: var(--lp-bone);
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.06 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
-		color: var(--lp-ink);
-		font-family: 'Space Grotesk Variable', sans-serif;
-	}
-	.lp-mono {
-		font-family: 'Space Grotesk Variable', sans-serif;
-	}
-	.lp-amber {
-		color: var(--lp-amber);
-	}
-	.lp-amber-bg {
-		box-shadow: inset 0 -0.45em 0 0 rgba(245, 166, 35, 0.45);
-	}
-	.lp-display {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: clamp(2.6rem, 11vw, 7rem);
-		line-height: 0.98;
-		letter-spacing: -0.01em;
-	}
-	.lp-display-sm {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: clamp(1.8rem, 6vw, 3.2rem);
-		line-height: 1.05;
-	}
-	.lp-h2 {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 1.5rem;
-		line-height: 1.15;
-	}
-	.lp-num {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 3rem;
-		line-height: 1;
-		color: transparent;
-		-webkit-text-stroke: 1.5px var(--lp-amber);
-	}
-	.lp-underline {
-		box-shadow:
-			inset 0 -0.18em 0 0 var(--lp-bone),
-			inset 0 -0.34em 0 0 var(--lp-amber-hi);
-	}
-	.lp-link {
-		text-decoration: underline;
-		text-underline-offset: 4px;
-	}
-	.lp-btn {
-		font-family: 'Archivo Black', sans-serif;
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-		padding: 0.9rem 2.4rem;
-		font-size: 1.05rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
-	.lp-btn:hover {
-		background: var(--lp-amber);
-		color: var(--lp-ink);
-	}
-	.lp-btn-nav {
-		font-family: 'Archivo Black', sans-serif;
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-		padding: 0.5rem 1.1rem;
-		font-size: 0.7rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-	.lp-btn-nav:hover {
-		background: var(--lp-amber);
-		color: var(--lp-ink);
-	}
-	.lp-btn-nav:hover .lp-amber {
-		color: var(--lp-ink);
-	}
-	/* outline variant for secondary CTAs */
-	.lp-btn-outline {
-		font-family: 'Archivo Black', sans-serif;
-		border: 2px solid var(--lp-ink);
-		color: var(--lp-ink);
-		background: transparent;
-		padding: 0.85rem 2.3rem;
-		font-size: 1.05rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
-	.lp-btn-outline:hover {
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-	}
-
-	/* hero halftone */
-	.lp-hero {
-		position: relative;
-	}
-	.lp-halftone {
-		position: absolute;
-		top: -4rem;
-		right: -6rem;
-		width: 34rem;
-		height: 34rem;
-		pointer-events: none;
-		background-image: radial-gradient(rgba(193, 125, 15, 0.5) 1.5px, transparent 1.5px);
-		background-size: 14px 14px;
-		mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent 70%);
-		-webkit-mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.5), transparent 70%);
-	}
-
-	/* tally divider */
-	.lp-tally {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: 1.4rem;
-		border-top: 2px solid var(--lp-ink);
-		padding: 0.8rem 1rem;
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 1.3rem;
-		letter-spacing: 0.25em;
-		color: var(--lp-amber);
-		overflow: hidden;
-		white-space: nowrap;
-	}
-	.lp-tally-group {
-		position: relative;
-	}
-	.lp-tally-strike {
-		position: absolute;
-		left: 0;
-		right: 0;
-		text-align: center;
-		transform: rotate(8deg) scaleX(1.6);
-		color: var(--lp-ink);
-	}
-	.lp-tally-label {
-		font-size: 0.65rem;
-		letter-spacing: 0.2em;
-		text-transform: uppercase;
-		color: var(--lp-ink);
-		opacity: 0.6;
-	}
-
 	/* ============ GANTT CHART ============ */
 
 	.lp-gantt-wrap {
@@ -613,7 +464,6 @@
 		row-gap: 0;
 	}
 
-	/* time column headers */
 	.lp-gantt-time {
 		font-size: 0.6rem;
 		letter-spacing: 0.18em;
@@ -624,7 +474,6 @@
 		opacity: 0.55;
 	}
 
-	/* phase name label column */
 	.lp-gantt-label {
 		display: flex;
 		align-items: center;
@@ -637,7 +486,6 @@
 		letter-spacing: -0.01em;
 	}
 
-	/* Gantt bars */
 	.lp-gantt-bar {
 		position: relative;
 		height: 1.6rem;
@@ -653,14 +501,14 @@
 		font-weight: 700;
 		text-transform: uppercase;
 	}
-	/* Phase 0: solid amber fill — active now */
+
 	.lp-stamp-amber.lp-gantt-bar {
 		background: var(--lp-amber);
 	}
 	.lp-stamp-amber .lp-gantt-bar-label {
 		color: var(--lp-bone);
 	}
-	/* Phase 1: amber stripe — building */
+
 	.lp-stamp-cap.lp-gantt-bar {
 		background: repeating-linear-gradient(
 			-40deg,
@@ -673,7 +521,7 @@
 	.lp-stamp-cap .lp-gantt-bar-label {
 		color: var(--lp-ink);
 	}
-	/* Phase 2: ink outline, hollow — planned */
+
 	.lp-stamp-outline.lp-gantt-bar {
 		background: transparent;
 		border: 2px solid var(--lp-ink);
@@ -682,7 +530,6 @@
 		color: var(--lp-ink);
 	}
 
-	/* sub-labels row under each bar */
 	.lp-gantt-subs {
 		display: flex;
 		flex-wrap: wrap;
@@ -697,121 +544,5 @@
 	.lp-gantt-sep {
 		color: var(--lp-amber);
 		font-weight: 700;
-	}
-
-	/* ============ CELLS (empat ruang pattern, reused for contribution lanes) ============ */
-
-	.lp-cell {
-		padding: 2rem 1.75rem 1.75rem;
-		border: 1px solid var(--lp-ink);
-		margin: -0.5px;
-		min-height: 13rem;
-		overflow: hidden;
-	}
-	.lp-cell-ghost {
-		position: absolute;
-		right: -0.5rem;
-		bottom: -2.4rem;
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 9rem;
-		line-height: 1;
-		color: transparent;
-		-webkit-text-stroke: 1.5px rgba(20, 18, 16, 0.14);
-		pointer-events: none;
-	}
-	.lp-cell-cta {
-		color: var(--lp-amber);
-	}
-	.lp-cell-live:hover {
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-	}
-	.lp-cell-live:hover .lp-cell-ghost {
-		-webkit-text-stroke-color: rgba(245, 166, 35, 0.35);
-	}
-	.lp-cell-live:hover .lp-cell-cta {
-		color: var(--lp-amber-hi);
-	}
-
-	/* ============ STAMPS ============ */
-
-	.lp-stamp {
-		font-family: 'Archivo Black', sans-serif;
-		font-size: 0.85rem;
-		letter-spacing: 0.12em;
-		color: var(--lp-cap);
-		border: 3px double var(--lp-cap);
-		border-radius: 4px;
-		padding: 0.35rem 0.8rem;
-		transform: rotate(-6deg);
-		opacity: 0.85;
-		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Cfilter id='r'%3E%3CfeTurbulence baseFrequency='0.6' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0.1'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='120' height='40' fill='black' filter='url(%23r)'/%3E%3C/svg%3E");
-		mask-size: cover;
-	}
-	.lp-stamp-sm {
-		font-size: 0.7rem;
-		padding: 0.25rem 0.6rem;
-	}
-	/* stamp color variants for phase status */
-	.lp-stamp-amber.lp-stamp,
-	.lp-stamp-amber.lp-stamp-sm {
-		color: var(--lp-amber);
-		border-color: var(--lp-amber);
-	}
-	.lp-stamp-cap.lp-stamp,
-	.lp-stamp-cap.lp-stamp-sm {
-		color: var(--lp-cap);
-		border-color: var(--lp-cap);
-	}
-	.lp-stamp-outline.lp-stamp,
-	.lp-stamp-outline.lp-stamp-sm {
-		color: var(--lp-ink);
-		border-color: var(--lp-ink);
-		opacity: 0.5;
-	}
-
-	/* ============ INVERTED BAND (GitHub section) ============ */
-
-	.lp-invert {
-		background: var(--lp-ink);
-		color: var(--lp-bone);
-	}
-	.lp-invert .lp-btn-outline {
-		border-color: var(--lp-bone);
-		color: var(--lp-bone);
-	}
-	.lp-invert .lp-btn-outline:hover {
-		background: var(--lp-bone);
-		color: var(--lp-ink);
-	}
-
-	/* tech stack chips */
-	.lp-stack-chip {
-		display: inline-block;
-		border: 1px solid rgba(244, 241, 234, 0.25);
-		padding: 0.25rem 0.55rem;
-	}
-
-	/* ============ CLOSING ============ */
-
-	.lp-closing {
-		background-image: radial-gradient(rgba(193, 125, 15, 0.18) 1.5px, transparent 1.5px);
-		background-size: 16px 16px;
-	}
-
-	/* ============ REVEAL ANIMATION ============ */
-
-	@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-		.lp-reveal {
-			opacity: 0;
-			transform: translateY(0.75rem);
-			transition:
-				opacity 0.5s ease var(--d, 0ms),
-				transform 0.5s ease var(--d, 0ms);
-		}
-		.lp-reveal:global(.in) {
-			opacity: 1;
-			transform: none;
-		}
 	}
 </style>

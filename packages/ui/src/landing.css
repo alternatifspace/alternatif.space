@@ -100,6 +100,82 @@
 	color: var(--lp-ink);
 }
 
+/* outline variant for secondary CTAs */
+.lp-btn-outline {
+	font-family: 'Archivo Black', sans-serif;
+	border: 2px solid var(--lp-ink);
+	color: var(--lp-ink);
+	background: transparent;
+	padding: 0.85rem 2.3rem;
+	font-size: 1.05rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+.lp-btn-outline:hover {
+	background: var(--lp-ink);
+	color: var(--lp-bone);
+}
+
+/* disabled state */
+.lp-btn:disabled {
+	cursor: not-allowed;
+}
+
+/* signed-in hero welcome block */
+.lp-welcome {
+	border: 2px solid var(--lp-ink);
+	padding: 1.75rem;
+	background: var(--lp-bone);
+}
+
+/* closing section with halftone echo */
+.lp-closing {
+	background-image: radial-gradient(rgba(193, 125, 15, 0.18) 1.5px, transparent 1.5px);
+	background-size: 16px 16px;
+}
+
+/* inverted band overrides */
+.lp-invert .lp-btn-outline {
+	border-color: var(--lp-bone);
+	color: var(--lp-bone);
+}
+.lp-invert .lp-btn-outline:hover {
+	background: var(--lp-bone);
+	color: var(--lp-ink);
+}
+
+/* tech stack chips */
+.lp-stack-chip {
+	display: inline-block;
+	border: 1px solid rgba(244, 241, 234, 0.25);
+	padding: 0.25rem 0.55rem;
+}
+
+/* phase status stamp variants */
+.lp-stamp-amber.lp-stamp,
+.lp-stamp-amber.lp-stamp-sm {
+	color: var(--lp-amber);
+	border-color: var(--lp-amber);
+}
+.lp-stamp-cap.lp-stamp,
+.lp-stamp-cap.lp-stamp-sm {
+	color: var(--lp-cap);
+	border-color: var(--lp-cap);
+}
+.lp-stamp-outline.lp-stamp,
+.lp-stamp-outline.lp-stamp-sm {
+	color: var(--lp-ink);
+	border-color: var(--lp-ink);
+	opacity: 0.5;
+}
+
+/* honeypot utility — visually hidden but not display:none */
+.lp-honeypot {
+	position: absolute;
+	left: -9999px;
+	opacity: 0;
+}
+
 /* hero halftone field — amber dots fading out (decorative) */
 .lp-hero {
 	position: relative;
