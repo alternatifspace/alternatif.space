@@ -121,15 +121,9 @@ importers:
 
   apps/www:
     dependencies:
-      '@fontsource-variable/fraunces':
-        specifier: ^5.2.4
-        version: 5.2.9
       '@fontsource-variable/space-grotesk':
         specifier: ^5.2.4
         version: 5.2.10
-      '@fontsource-variable/unbounded':
-        specifier: ^5.2.4
-        version: 5.2.8
       '@fontsource/archivo-black':
         specifier: ^5.2.4
         version: 5.2.8
@@ -716,14 +710,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource-variable/fraunces@5.2.9':
-    resolution: {integrity: sha512-Y6IjunlN9Ni723np+GIgAaKzCDBrPRrqNi01TZxHs5wtHYROWFM9W6yiT+/gGwSjWIRD18oX17kD/BRWekc/Lw==}
-
   '@fontsource-variable/space-grotesk@5.2.10':
     resolution: {integrity: sha512-yJQO/o35/hAP3CFnpdFTwQku2yzJOae2HIpBmqkOVoxhhXJaQP3g+b6Jrz7u+eI7A5ZdCIf88uMWpBJdFiGr5w==}
-
-  '@fontsource-variable/unbounded@5.2.8':
-    resolution: {integrity: sha512-DWC/HEdNNbjMH6ngeeCAPExKMsedoY+pV3ZnRXzFcAzXuGHB6dEwsXNVQ4fiuuYMGguq9TSAEUat4Oy5prdwWQ==}
 
   '@fontsource/archivo-black@5.2.8':
     resolution: {integrity: sha512-3zNj/o9LzWyDl/UEpY5IOHpAQyUtFr3hQaFS7NSKwCLLkXOfH/CMCt1L2b2Z+OF25OURtOYenCadgAebALz7/A==}
@@ -2215,11 +2203,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.3':
     optional: true
 
-  '@fontsource-variable/fraunces@5.2.9': {}
-
   '@fontsource-variable/space-grotesk@5.2.10': {}
-
-  '@fontsource-variable/unbounded@5.2.8': {}
 
   '@fontsource/archivo-black@5.2.8': {}
 
