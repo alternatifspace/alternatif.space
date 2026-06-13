@@ -59,6 +59,22 @@
 			'3 BULAN'
 		]
 	] as const;
+
+	// "Apa ini" — three premises compressing the soul doc; full version at /tentang.
+	const premis = [
+		[
+			'Kita makhluk kolektif',
+			'Kamu tahu apa yang kamu percaya karena pernah ketemu yang percaya hal beda. Sendirian, posisimu nggak ke mana-mana.'
+		],
+		[
+			'Partai itu kelompok',
+			'Bukan mesin pemilu, bukan elit. Sekelompok orang yang searah, ngumpul karena nemu sesamanya. Kata itu kita ambil balik.'
+		],
+		[
+			'Beda itu bahan baku',
+			'Perbedaan bukan masalah yang harus diberesin. Itu tempat pemahaman baru lahir. Kita kasih ruang — bukan diredam.'
+		]
+	] as const;
 </script>
 
 <svelte:head>
@@ -165,10 +181,44 @@
 		{/each}
 	</div>
 
+	<!-- Apa ini — brief soul statement (intro before cara mainnya). Compresses
+	     docs/brand/the-soul-of-alternatif-space.md into three premises; the full
+	     version lives at /tentang. Belonging-before-rigor: feed = cermin → ruang. -->
+	<section id="apa-ini" class="border-t-2 px-5 py-20 sm:px-10" style="border-color: var(--lp-ink)">
+		<p class="lp-mono text-xs tracking-[0.25em] uppercase opacity-60">
+			<span class="lp-amber font-bold">01</span> — Apa ini
+		</p>
+		<div class="mt-4 grid gap-12 lg:grid-cols-[1fr_minmax(20rem,27rem)] lg:gap-16">
+			<div>
+				<h2 class="lp-display-sm max-w-2xl">
+					Ruang buat ketemu yang <span class="lp-amber-bg">nggak sepikiran.</span>
+				</h2>
+				<p class="mt-6 max-w-xl text-lg leading-relaxed font-medium">
+					Feed-mu nunjukin yang udah kamu setujui — beranda jadi cermin, bukan jendela. Di sini
+					kebalikannya: kamu ketemu orang yang berangkat dari posisi beda, lalu ngobrol beneran.
+					Bukan biar sepakat. Biar tahu persis di mana bedanya, dan kenapa.
+				</p>
+				<a href="/tentang" class="lp-btn-outline mt-8 inline-block">Kenapa ruang ini ada →</a>
+			</div>
+			<dl class="self-start">
+				{#each premis as [title, body], i (title)}
+					<div
+						class="lp-reveal border-l-2 py-3 pl-5"
+						style="border-color: var(--lp-amber); --d: {i * 70}ms"
+						use:reveal
+					>
+						<dt class="lp-h2 text-lg">{title}</dt>
+						<dd class="mt-2 leading-relaxed opacity-80">{body}</dd>
+					</div>
+				{/each}
+			</dl>
+		</div>
+	</section>
+
 	<!-- W0-02 cara kerjanya -->
 	<section class="border-t-2 px-5 py-20 sm:px-10" style="border-color: var(--lp-ink)">
 		<p class="lp-mono text-xs tracking-[0.25em] uppercase opacity-60">
-			<span class="lp-amber font-bold">01</span> — Cara mainnya
+			<span class="lp-amber font-bold">02</span> — Cara mainnya
 		</p>
 		<div class="mt-10 grid gap-0 md:grid-cols-3">
 			{#each steps as [title, body], i (title)}
@@ -190,7 +240,7 @@
 	<section class="lp-kbbi border-t-2 px-5 py-20 sm:px-10" style="border-color: var(--lp-ink)">
 		<div class="flex flex-wrap items-baseline justify-between gap-3">
 			<p class="lp-mono text-xs tracking-[0.25em] uppercase opacity-70">
-				<span class="lp-amber font-bold">02</span> — Buka kamus dulu
+				<span class="lp-amber font-bold">03</span> — Buka kamus dulu
 			</p>
 			<span class="lp-stamp lp-stamp-bone" aria-hidden="true">MENURUT KAMUS</span>
 		</div>
@@ -214,7 +264,7 @@
 	<!-- W0-03 empat ruang — poster cells, not plain cards -->
 	<section class="border-t-2 px-5 py-20 sm:px-10" style="border-color: var(--lp-ink)">
 		<p class="lp-mono text-xs tracking-[0.25em] uppercase opacity-60">
-			<span class="lp-amber font-bold">03</span> — Empat ruang
+			<span class="lp-amber font-bold">04</span> — Empat ruang
 		</p>
 		<h2 class="lp-display-sm mt-4 max-w-2xl">Satu siklus, empat ruang.</h2>
 		<div class="mt-10 grid gap-0 border-2 sm:grid-cols-2" style="border-color: var(--lp-ink)">
@@ -253,7 +303,7 @@
 	<!-- W0-04 aturan mainnya beda -->
 	<section class="border-t-2 px-5 py-20 sm:px-10" style="border-color: var(--lp-ink)">
 		<p class="lp-mono text-xs tracking-[0.25em] uppercase opacity-60">
-			<span class="lp-amber font-bold">04</span> — Aturan main
+			<span class="lp-amber font-bold">05</span> — Aturan main
 		</p>
 		<h2 class="lp-display-sm mt-4 max-w-2xl">
 			Aturan mainnya beda — dan itu <span class="lp-amber-bg">intinya.</span>
@@ -276,7 +326,7 @@
 	<!-- W0-05 closing -->
 	<section class="lp-closing border-t-2 px-5 py-24 text-center sm:px-10" style="border-color: var(--lp-ink)">
 		<p class="lp-mono text-xs tracking-[0.25em] uppercase opacity-60">
-			<span class="lp-amber font-bold">05</span> — Penutup
+			<span class="lp-amber font-bold">06</span> — Penutup
 		</p>
 		<p class="lp-display mt-6">
 			Otot nggak tumbuh<br />dari <span class="lp-underline">nonton.</span>
@@ -293,6 +343,7 @@
 					{#if segera}<span class="opacity-50">{name}</span>{:else}<a href={url} class="lp-link">{name}</a>{/if}
 				{/each}
 			</span>
+			<a href="/tentang" class="lp-link">tentang</a> /
 			<a href="/contribute" class="lp-link">kontribusi</a> /
 			<a href="/kontak" class="lp-link">kontak</a>
 		</div>
