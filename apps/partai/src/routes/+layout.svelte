@@ -133,11 +133,11 @@
 				transition:fade={{ duration: 150 }}
 			></button>
 			<div
-				class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[80%] flex-col border-r-2 p-5 md:hidden"
+				class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[80%] flex-col overflow-y-auto border-r-2 p-5 md:hidden"
 				style="background: var(--lp-bone); border-color: var(--lp-ink)"
 				transition:fly={{ x: -288, duration: 200 }}
 			>
-				<a href="/" class="lp-mono text-base font-bold tracking-[0.15em] uppercase">partai<span class="lp-amber">.alternatif.space</span></a>
+				<a href="/" class="lp-mono text-sm font-bold tracking-[0.1em] break-words [overflow-wrap:anywhere] uppercase">partai<span class="lp-amber">.alternatif.space</span></a>
 				<nav class="mt-6 flex flex-col">
 					<a href="/jelajah" class="lp-link flex min-h-11 items-center text-sm font-medium">Jelajahi partai</a>
 					<a href={MUFAKAT_URL} class="lp-link flex min-h-11 items-center text-sm font-medium">Mufakat</a>
