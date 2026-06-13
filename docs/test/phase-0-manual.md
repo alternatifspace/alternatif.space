@@ -2,14 +2,42 @@
 
 > **Status:** Ready  
 > **Scope:** All 78 features from partai PRD v0.3, mufakat PRD v0.1, www PRD v0.3, subdomain landings v0.1, TRD v1.3  
+> **Scenarios:** 53 (44 Local, 9 Production) + 14 smoke test  
 > **Format:** Each scenario = steps + expected result + edge cases. Check `[x]` when passed.  
 > **Tracking:** Failed scenarios → open a GitHub issue with `bug` label, link inline.
+
+### Environment Tags
+
+| Tag | Meaning | Requires |
+|-----|---------|----------|
+| `[Local]` | Testable with `pnpm db:reset` + `pnpm dev` against `localhost:*` | Local Supabase, Clerk dev instance |
+| `[Production]` | Must test against `*.alternatif.space` deployed URLs | Clerk prod, all subdomains deployed, real email |
+
+> **Strategy:** Run all `[Local]` scenarios first — ~80% coverage. Then run the 9 `[Production]` scenarios after each deploy.
+
+### Production-Only Scenarios
+
+| Scenario | Why production-only |
+|----------|---------------------|
+| SC-A1 — Sign-up + email verification | Clerk dev doesn't send real emails |
+| SC-A4 — Cross-subdomain SSO | `localhost:5173` ≠ `localhost:5174`, no shared `.alternatif.space` cookie |
+| SC-F2 — Good-question split trigger | Requires 5+ accounts reacting simultaneously |
+| SC-F3 — OP-ship: Confirm | Depends on SC-F2 split being created |
+| SC-F4 — OP-ship: Decline | Depends on SC-F2 split being created |
+| SC-F5 — Recursive split | Depends on SC-F2 split being created |
+| SC-H3 — Service worker offline | PWA requires HTTPS (only on deployed domain) |
+| SC-H5 — Notification bell | Notifications dispatched by Edge Functions, need real Clerk session |
+| SC-W3 — Contact form | Resend delivers to real inbox; `RESEND_API_KEY` only in production |
 
 ---
 
 ## 1. Prerequisites
 
-### Test Accounts
+### Test Accounts (Local)
+
+Clerk dev instance: create fresh accounts during testing. No pre-configured accounts exist.
+
+### Test Accounts (Production)
 
 | Role | Email | Password | Notes |
 |------|-------|----------|-------|
@@ -28,7 +56,7 @@
 | partai | `http://localhost:5173` | `https://partai.alternatif.space` |
 | mufakat | `http://localhost:5174` | `https://mufakat.alternatif.space` |
 
-### Seed Data
+### Seed Data (Local)
 
 Run `pnpm db:reset` before starting. Confirms:
 - 2 parties (one open, one invite-only), 5 users, 2 threads, 3 reactions
@@ -39,7 +67,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 2. Auth & Onboarding
 
-- [ ] **SC-A1 — Sign up and first login**
+- [ ] **SC-A1 [Production] — Sign up and first login**
   **Covers:** P0-01, W0-01, W0-06  
   **Steps:**
   1. Visit `alternatif.space` — confirm landing renders with "Demokrasi itu otot." headline
@@ -49,7 +77,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** After verification, redirected to `/onboarding` on partai subdomain.
   **Edge:** Duplicate email → Clerk shows inline error. Short password → Clerk rejects with min-length message.
 
-- [ ] **SC-A2 — First-login onboarding**
+- [ ] **SC-A2 [Local] — First-login onboarding**
   **Covers:** P0-01, P0-02, 11.6a Part B  
   **Steps:**
   1. On `/onboarding`, confirm "Bendera di tangan. Tinggal dikibarin." headline
@@ -57,7 +85,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Redirected to `/bergabung`. Bio can be empty. Display name max 60 chars enforced.
   **Edge:** No name → form validation error. Name >60 chars → truncated by maxlength.
 
-- [ ] **SC-A3 — Sign in / sign out**
+- [ ] **SC-A3 [Local] — Sign in / sign out**
   **Covers:** P0-01, T-01  
   **Steps:**
   1. Sign out → visit `/masuk` → confirm Pamflet-styled page with "Masuk, lanjut latihan."
@@ -67,7 +95,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Auth state transitions correctly. No flash of signed-in content for signed-out users.
   **Edge:** Wrong password → Clerk error. Signed-in user visiting `/masuk` → redirected away.
 
-- [ ] **SC-A4 — Cross-subdomain SSO**
+- [ ] **SC-A4 [Production] — Cross-subdomain SSO**
   **Covers:** T-01, 1.8  
   **Steps:**
   1. Sign in on `partai.alternatif.space`
@@ -76,7 +104,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** All three recognize the same session. www shows "Lanjut ke partai →" nav button. Mufakat shows user avatar.
   **Edge:** Different browser → not signed in. Cookie cleared → not signed in.
 
-- [ ] **SC-A5 — Route gating (auth redirects)**
+- [ ] **SC-A5 [Local] — Route gating (auth redirects)**
   **Covers:** T-18, T-19, P0-01  
   **Steps (as anonymous):**
   1. Visit `/buat-partai` → redirected to `/masuk`
@@ -94,7 +122,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 3. Party Discovery & Profile
 
-- [ ] **SC-B1 — Browse parties page**
+- [ ] **SC-B1 [Local] — Browse parties page**
   **Covers:** P0-03, SL-P02, SL-P04  
   **Prerequisites:** At least 2 parties from seed data.
   **Steps (as anonymous on partai.alternatif.space):**
@@ -106,7 +134,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Cards render with `lp-card` styling. Dormant parties show dormant badge.
   **Edge:** No parties match filter → empty state shown. URL-encoded search term → works.
 
-- [ ] **SC-B2 — Party profile page**
+- [ ] **SC-B2 [Local] — Party profile page**
   **Covers:** P0-04  
   **Prerequisites:** An active party exists.
   **Steps:**
@@ -120,7 +148,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** All profile sections render. No archetype label anywhere.
   **Edge:** Dormant party → dormant badge shown. Dissolved party → marked but visible. Non-existent slug → 404.
 
-- [ ] **SC-B3 — Party member list**
+- [ ] **SC-B3 [Local] — Party member list**
   **Covers:** P0-04, P0-18  
   **Steps:**
   1. Visit `/partai/[slug]/anggota`
@@ -129,7 +157,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Leader has distinct indicator. Member count matches visible list.
   **Edge:** Party with 1 member (leader only) → still renders.
 
-- [ ] **SC-B4 — User profile page**
+- [ ] **SC-B4 [Local] — User profile page**
   **Covers:** P0-02, T-14  
   **Steps:**
   1. Visit `/profil/[user-id]`
@@ -138,7 +166,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Profile renders for any user (public). Party badge links to party profile.
   **Edge:** User with no party history → "Belum ada riwayat keanggotaan." Non-existent user ID → 404.
 
-- [ ] **SC-B5 — Browse signed-out landing (partai)**
+- [ ] **SC-B5 [Local] — Browse signed-out landing (partai)**
   **Covers:** SL-P01–SL-P05  
   **Steps (as anonymous):**
   1. Visit `partai.alternatif.space/`
@@ -151,7 +179,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** All sections render in Pamflet style. Scrolling reveals content. Tally divider present.
   **Edge:** Signed-in user visiting `/` → redirected to party page, not landing.
 
-- [ ] **SC-B6 — Browse signed-out landing (mufakat)**
+- [ ] **SC-B6 [Local] — Browse signed-out landing (mufakat)**
   **Covers:** SL-M01–SL-M06  
   **Steps (as anonymous):**
   1. Visit `mufakat.alternatif.space/`
@@ -168,7 +196,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 4. Create Party Wizard
 
-- [ ] **SC-C1 — Create party: Custom path (full wizard)**
+- [ ] **SC-C1 [Local] — Create party: Custom path (full wizard)**
   **Covers:** P0-05–P0-07, T-22, T-23  
   **Prerequisites:** Signed in, no current party membership.
   **Steps:**
@@ -181,7 +209,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Party created with `status = 'pending_review'`. Redirected to party profile. Config permanently locked.
   **Edge:** Logo >2MB → rejected. Manifesto <50 words → CTA disabled. Name >80 chars → truncated. Missing required fields → CTA disabled.
 
-- [ ] **SC-C2 — Create party: Preset path (Vanguard)**
+- [ ] **SC-C2 [Local] — Create party: Preset path (Vanguard)**
   **Covers:** P0-05  
   **Steps:**
   1. Visit `/buat-partai`
@@ -190,7 +218,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Party created with Vanguard preset config values.
   **Edge:** Changing preset params after selection → CTA no longer shows preset-completion counter.
 
-- [ ] **SC-C3 — Logo upload validation**
+- [ ] **SC-C3 [Local] — Logo upload validation**
   **Covers:** P0-07, T-17  
   **Steps:**
   1. In wizard Step 2, upload a PNG → confirm preview shown (cropped to square)
@@ -200,7 +228,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Accepted formats: JPG, PNG, WebP. Square crop applied client-side.
   **Edge:** Upload fails mid-way → retry button appears.
 
-- [ ] **SC-C4 — Manifesto editor**
+- [ ] **SC-C4 [Local] — Manifesto editor**
   **Covers:** P0-06  
   **Steps:**
   1. In wizard Step 2, type manifesto text
@@ -211,7 +239,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** TipTap editor with toolbar. Auto-save draft to localStorage. No image embed button.
   **Edge:** Leave page and return → draft restored. Paste formatted text → preserved.
 
-- [ ] **SC-C5 — Governance config lockdown (T-22)**
+- [ ] **SC-C5 [Local] — Governance config lockdown (T-22)**
   **Covers:** T-22, T-23, P0-05  
   **Steps:**
   1. Create a party with specific governance values
@@ -220,7 +248,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Config frozen at publish. `honeymoon_ends_at` = `created_at + 3 months`.
   **Edge:** Leader re-publishes same config → idempotent.
 
-- [ ] **SC-C6 — Post-approval share (P0-13)**
+- [ ] **SC-C6 [Local] — Post-approval share (P0-13)**
   **Covers:** P0-13  
   **Prerequisites:** Party approved by admin (set status='active' via SQL).
   **Steps:**
@@ -234,7 +262,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 5. Joining & Membership
 
-- [ ] **SC-D1 — Open join (instant)**
+- [ ] **SC-D1 [Local] — Open join (instant)**
   **Covers:** P0-08  
   **Prerequisites:** An open-join party exists. Signed in, no membership.
   **Steps:**
@@ -244,7 +272,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Membership created instantly. No approval step.
   **Edge:** Already a member of another party → prompt to leave first.
 
-- [ ] **SC-D2 — Already-member gate**
+- [ ] **SC-D2 [Local] — Already-member gate**
   **Covers:** P0-08  
   **Prerequisites:** Signed in, member of Party A.
   **Steps:**
@@ -253,7 +281,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Cannot join second party. Must leave current first.
   **Edge:** Leave flow triggered from gate → correct redirect.
 
-- [ ] **SC-D3 — Application join**
+- [ ] **SC-D3 [Local] — Application join**
   **Covers:** P0-09  
   **Prerequisites:** An application-only party exists. Signed in, no membership.
   **Steps:**
@@ -263,7 +291,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Application submitted. Confirmation shown: "Lamaran terkirim, menunggu review."
   **Edge:** Message >500 chars → rejected. Already pending application → duplicate rejected. Already member → blocked.
 
-- [ ] **SC-D4 — Review application (leader)**
+- [ ] **SC-D4 [Local] — Review application (leader)**
   **Covers:** P0-09  
   **Prerequisites:** An application exists for your party.
   **Steps (as leader):**
@@ -273,7 +301,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Approved → member row created + notification sent. Rejected → application status = 'rejected'.
   **Edge:** Applicant already joined another party → auto-rejected.
 
-- [ ] **SC-D5 — Invite-only join**
+- [ ] **SC-D5 [Local] — Invite-only join**
   **Covers:** P0-10  
   **Prerequisites:** An invite-only party exists. You are a member.
   **Steps (as member):**
@@ -283,7 +311,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Invite link redirects to party profile with pre-activated join. Single-use only.
   **Edge:** Expired invite (7+ days) → "Token sudah kadaluarsa." Already used → "Token sudah digunakan."
 
-- [ ] **SC-D6 — Leave party**
+- [ ] **SC-D6 [Local] — Leave party**
   **Covers:** P0-11  
   **Prerequisites:** Member of a party (not leader).
   **Steps:**
@@ -293,7 +321,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Membership removed. History log shows leave record. Past posts retain flag.
   **Edge:** Leader tries to leave → blocked ("Ketua tidak bisa meninggalkan partai"). Last member → still allowed to leave.
 
-- [ ] **SC-D7 — Post-join nudge screen**
+- [ ] **SC-D7 [Local] — Post-join nudge screen**
   **Covers:** P0-12  
   **Prerequisites:** Just joined a party.
   **Steps:**
@@ -308,7 +336,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 6. Mufakat: Threads & Comments
 
-- [ ] **SC-E1 — Create thread (happy path)**
+- [ ] **SC-E1 [Local] — Create thread (happy path)**
   **Covers:** M0-01, M0-02, M0-06  
   **Prerequisites:** Signed in, active party member.
   **Steps:**
@@ -319,7 +347,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Thread created with status `aktif`. Redirected to thread page. OP shows party flag.
   **Edge:** Title >200 chars → rejected. Empty body → CTA disabled. Dedup suggestion shown but ignored → thread still created.
 
-- [ ] **SC-E2 — Thread page rendering**
+- [ ] **SC-E2 [Local] — Thread page rendering**
   **Covers:** M0-03, M0-04, M0-05, M0-06  
   **Prerequisites:** A thread with comments exists.
   **Steps:**
@@ -331,7 +359,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Thread page renders correctly with all row types interleaved.
   **Edge:** Thread status = `dialihkan` → redirect to canonical. Invalid slug → 404.
 
-- [ ] **SC-E3 — Comment creation**
+- [ ] **SC-E3 [Local] — Comment creation**
   **Covers:** M0-05  
   **Prerequisites:** Active thread exists. Signed in, active party member.
   **Steps:**
@@ -341,7 +369,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Comment appears inline. Party flag visible. Timestamp shown.
   **Edge:** Empty comment → rejected. Reply to comment at depth 3 → composer hidden (max depth reached).
 
-- [ ] **SC-E4 — Comment edit window (15 min)**
+- [ ] **SC-E4 [Local] — Comment edit window (15 min)**
   **Covers:** M0-05  
   **Steps:**
   1. Post a comment → edit button visible
@@ -350,7 +378,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** 15-minute window enforced. "diedit" marker shown on edited comments.
   **Edge:** Another user tries to edit your comment → button not shown.
 
-- [ ] **SC-E5 — Comment soft-delete**
+- [ ] **SC-E5 [Local] — Comment soft-delete**
   **Covers:** M0-05  
   **Steps:**
   1. Post a comment → delete it
@@ -359,7 +387,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Structure preserved. Children still accessible.
   **Edge:** Admin hides comment (moderation) → "[disembunyikan moderator]" stub.
 
-- [ ] **SC-E6 — Thread statuses**
+- [ ] **SC-E6 [Local] — Thread statuses**
   **Covers:** M0-03  
   **Prerequisites:** You are OP or admin of a thread.
   **Steps:**
@@ -368,7 +396,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Status changes reflected immediately. Closing summary visible on thread page.
   **Edge:** Non-OP, non-admin tries to close → action hidden.
 
-- [ ] **SC-E7 — Dedup suggestion → accepted rate**
+- [ ] **SC-E7 [Local] — Dedup suggestion → accepted rate**
   **Covers:** M0-02, 10.1  
   **Steps:**
   1. Create a thread with a title similar to an existing one → dedup suggestion shown
@@ -377,7 +405,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Dedup suggestions shown for similar titles (pg_trgm). Analytics view tracks acceptance.
   **Edge:** No similar threads → no suggestions shown (not an error).
 
-- [ ] **SC-E8 — Rate limiting**
+- [ ] **SC-E8 [Local] — Rate limiting**
   **Covers:** M0-17, T-11  
   **Prerequisites:** New account (<48h).
   **Steps:**
@@ -392,7 +420,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 7. Reactions, Splits & OP-Ship
 
-- [ ] **SC-F1 — Add reactions**
+- [ ] **SC-F1 [Local] — Add reactions**
   **Covers:** M0-07  
   **Steps:**
   1. On a thread, click "Setuju" on OP post → count increments
@@ -402,7 +430,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Two reaction types only. No downvote exists. Own reaction toggleable.
   **Edge:** Anonymous → reactions hidden/disabled. Non-member → reactions disabled.
 
-- [ ] **SC-F2 — Good-question split trigger**
+- [ ] **SC-F2 [Production] — Good-question split trigger**
   **Covers:** M0-08, M0-09, M0-10, M0-11, T-06  
   **Prerequisites:** A thread with a comment that can accumulate 5+ good-question reactions.
   **Steps:**
@@ -413,7 +441,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Split executes atomically. Comment moves, not copies. New thread slug unique.
   **Edge:** Threshold not met → no split. Threshold math never shown to client.
 
-- [ ] **SC-F3 — OP-ship: Confirm**
+- [ ] **SC-F3 [Production] — OP-ship: Confirm**
   **Covers:** M0-09, T-07  
   **Steps:**
   1. As the comment author, click "Konfirmasi" on OP-ship prompt
@@ -421,7 +449,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** You become the OP of the new thread.
   **Edge:** Window expired → auto-confirmed. 4h reminder notification sent.
 
-- [ ] **SC-F4 — OP-ship: Decline**
+- [ ] **SC-F4 [Production] — OP-ship: Decline**
   **Covers:** M0-09, M0-10  
   **Steps:**
   1. As the comment author, click "Tolak" on OP-ship prompt
@@ -430,7 +458,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Split still happens, but thread has no OP.
   **Edge:** Analytics `analytics_op_optout_rate` increments.
 
-- [ ] **SC-F5 — Recursive split**
+- [ ] **SC-F5 [Production] — Recursive split**
   **Covers:** M0-12, 10.5  
   **Prerequisites:** A split-originated thread with active discussion.
   **Steps:**
@@ -440,7 +468,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Recursive splitting works. No hard depth cap (throttled naturally by threshold).
   **Edge:** D3 pathology → monitored via analytics.
 
-- [ ] **SC-F6 — Split survival tracking**
+- [ ] **SC-F6 [Local] — Split survival tracking**
   **Covers:** 10.3, 10.6  
   **Steps:**
   1. Create conditions for a split
@@ -453,7 +481,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 8. Admin & Moderation
 
-- [ ] **SC-G1 — Admin gate**
+- [ ] **SC-G1 [Local] — Admin gate**
   **Covers:** T-12, M0-16  
   **Steps:**
   1. As admin, visit `/moderasi` → confirm dashboard renders with report queue + flagged queue
@@ -461,7 +489,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Admin-only routes gated server-side.
   **Edge:** Direct URL access by non-admin → 404.
 
-- [ ] **SC-G2 — Report content**
+- [ ] **SC-G2 [Local] — Report content**
   **Covers:** M0-16  
   **Steps:**
   1. On any thread or comment, click "Laporkan"
@@ -470,7 +498,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Report created with `status = 'pending'`. Pedagogy copy shown.
   **Edge:** Note >500 chars → rejected. Same user reporting same content twice → rejected.
 
-- [ ] **SC-G3 — Review report (admin)**
+- [ ] **SC-G3 [Local] — Review report (admin)**
   **Covers:** M0-16, T-12  
   **Prerequisites:** A pending report exists.
   **Steps (as admin):**
@@ -481,7 +509,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Moderation log updated with action type + date (no identity).
   **Edge:** Report already reviewed → 409.
 
-- [ ] **SC-G4 — Semantic flagging**
+- [ ] **SC-G4 [Local] — Semantic flagging**
   **Covers:** M0-14  
   **Steps:**
   1. On a comment, click "Tandai: perdebatan definisi"
@@ -490,7 +518,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Flags grouped by comment_id. Admin queue prioritizes by flag count.
   **Edge:** Same user flagging twice → unique constraint blocks it.
 
-- [ ] **SC-G5 — Admin spin-off**
+- [ ] **SC-G5 [Local] — Admin spin-off**
   **Covers:** M0-13, M0-15, T-08, T-10  
   **Prerequisites:** A thread with flagged comments exists. Admin signed in.
   **Steps:**
@@ -507,7 +535,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 9. Cross-Cutting
 
-- [ ] **SC-H1 — RLS: Unauthenticated write blocked**
+- [ ] **SC-H1 [Local] — RLS: Unauthenticated write blocked**
   **Covers:** T-02, T-03, T-04  
   **Steps:**
   1. As anonymous, attempt to insert a party via Supabase API → 401/403
@@ -516,7 +544,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** All writes blocked for unauthorized roles. `mufakat_comments_public` view withholds hidden/deleted content.
   **Edge:** Service role bypasses RLS (expected — used by Edge Functions).
 
-- [ ] **SC-H2 — Dormant status transition**
+- [ ] **SC-H2 [Local] — Dormant status transition**
   **Covers:** T-05  
   **Steps:**
   1. Set a party leader's `last_active_at` to 31 days ago
@@ -526,7 +554,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Cron marks dormant. Leader activity reactivates.
   **Edge:** Already dormant → no change. Dissolved party → not affected.
 
-- [ ] **SC-H3 — Offline handling**
+- [ ] **SC-H3 [Production] — Offline handling**
   **Covers:** PWA, 9.1, 9.2  
   **Steps:**
   1. Visit partai or mufakat, let pages cache
@@ -537,7 +565,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Service worker caches app shell + visited content. Auth routes never cached.
   **Edge:** Never-visited page → "Sedang offline dan halaman ini belum pernah dibuka."
 
-- [ ] **SC-H4 — Error pages**
+- [ ] **SC-H4 [Local] — Error pages**
   **Covers:** Error states  
   **Steps:**
   1. Visit `/partai/nonexistent` → confirm 404 page with Pamflet styling
@@ -546,7 +574,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Error pages styled consistently with lp-* tokens. Recovery links present.
   **Edge:** www has no custom error page (relies on Cloudflare Pages default).
 
-- [ ] **SC-H5 — Notification bell**
+- [ ] **SC-H5 [Production] — Notification bell**
   **Covers:** T-21  
   **Steps:**
   1. Receive a notification (e.g., OP-ship prompt, application review result)
@@ -560,7 +588,7 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 10. www Landing Page
 
-- [ ] **SC-W1 — Landing page renders**
+- [ ] **SC-W1 [Local] — Landing page renders**
   **Covers:** W0-01–W0-07  
   **Steps:**
   1. Visit `alternatif.space`
@@ -570,7 +598,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** All sections render. Amber accent, bone background, Archivo Black display font, Space Grotesk body.
   **Edge:** Signed-in user → "Lanjut ke partai →" in nav instead of "Masuk."
 
-- [ ] **SC-W2 — SEO meta tags**
+- [ ] **SC-W2 [Local] — SEO meta tags**
   **Covers:** W0-06  
   **Steps:**
   1. View page source of `alternatif.space`
@@ -579,7 +607,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** All OG + Twitter tags present. Canonical URL correct.
   **Edge:** Dynamic pages (partai/[slug]) → party-specific OG tags.
 
-- [ ] **SC-W3 — Contact page**
+- [ ] **SC-W3 [Production] — Contact page**
   **Covers:** Kontak page  
   **Steps:**
   1. Visit `/kontak`
@@ -589,7 +617,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Expected:** Form submits to `/api/contact`. Resend delivers to inbox.
   **Edge:** Missing fields → validation errors. Network offline → error message.
 
-- [ ] **SC-W4 — `/cara-kerja` deep-dive (partai)**
+- [ ] **SC-W4 [Local] — `/cara-kerja` deep-dive (partai)**
   **Covers:** SL-PD01–SL-PD07  
   **Steps:**
   1. Visit `partai.alternatif.space/cara-kerja`
@@ -602,16 +630,27 @@ Run `pnpm db:reset` before starting. Confirms:
 
 ## 11. Regression Smoke Test
 
-Run before every deploy. Should take <5 minutes.
+Run before every deploy. ~5 minutes local, ~3 minutes production.
 
-- [ ] **SMK-1** — `alternatif.space` loads, "Demokrasi itu otot." visible
-- [ ] **SMK-2** — `partai.alternatif.space` loads (signed-out → landing; signed-in → redirects)
-- [ ] **SMK-3** — `mufakat.alternatif.space` loads (signed-out → landing; signed-in → feed)
-- [ ] **SMK-4** — Sign up → onboarding → create party → publish (end-to-end)
-- [ ] **SMK-5** — Join a party → post a comment on mufakat → react
-- [ ] **SMK-6** — Admin: visit `/moderasi` → queue visible
-- [ ] **SMK-7** — `/kontak` → form submits without error
-- [ ] **SMK-8** — `/cara-kerja` → governance table renders
+### Local Smoke Test (`pnpm dev` on `localhost:*`)
+
+- [ ] **SMK-L1** — `localhost:5179` loads, "Demokrasi itu otot." visible
+- [ ] **SMK-L2** — `localhost:5173` — signed-out sees landing; sign in → redirected to party/jelajah
+- [ ] **SMK-L3** — `localhost:5174` — signed-out sees landing; sign in → renders feed
+- [ ] **SMK-L4** — Sign up → onboarding → create party → publish (end-to-end)
+- [ ] **SMK-L5** — Join a party → post a comment on mufakat → react
+- [ ] **SMK-L6** — Admin: visit `/moderasi` → queue visible
+- [ ] **SMK-L7** — `/cara-kerja` → governance table renders
+- [ ] **SMK-L8** — Error page: visit `/partai/nonexistent` → 404 with Pamflet styling
+
+### Production Smoke Test (after deploy, `*.alternatif.space`)
+
+- [ ] **SMK-P1** — `alternatif.space` loads, signed-in detection works
+- [ ] **SMK-P2** — `partai.alternatif.space` loads (signed-out → landing; signed-in → redirect)
+- [ ] **SMK-P3** — `mufakat.alternatif.space` loads (signed-out → landing; signed-in → feed)
+- [ ] **SMK-P4** — Cross-subdomain SSO: sign in on partai → open mufakat → session recognized
+- [ ] **SMK-P5** — `/kontak` → form submits, email lands in inbox
+- [ ] **SMK-P6** — PWA: visit on mobile → "Add to Home Screen" prompt
 
 ---
 
@@ -664,21 +703,23 @@ Run before every deploy. Should take <5 minutes.
 | T-12 | Content moderation | SC-G3 |
 | T-13 | Edge function atomicity | SC-F2 (implicit) |
 | T-14 | Party flag denorm | SC-B4, SC-E2 |
-| T-15 | Muted member | (requires manual db update) |
+| T-15 | Muted member | (manual SQL — local or prod) |
 | T-17 | Storage policies | SC-C3 |
 | T-18 | Route gating | SC-A5 |
 | T-19 | Deep linking | SC-A5 |
-| T-21 | Notification bell | SC-H5 |
+| T-21 | Notification bell | SC-H5 [Production] |
 | T-22 | Config lockdown | SC-C5 |
 | T-23 | Honeymoon | SC-C5 |
-| 10.1–10.7 | Analytics views | SC-E7, SC-F5, SC-F6 |
+| 10.1–10.7 | Analytics views | SC-E7 [Local], SC-F6 [Local] — query prod for real data |
 
 ---
 
 ## 13. Notes
 
-- **Production testing:** Run against `*.alternatif.space` URLs after every deploy.
-- **Local testing:** Run `pnpm db:reset` first, then test against `localhost:*` URLs.
-- **Multi-user scenarios (SC-F2):** Requires 5+ accounts reacting. Use incognito windows or ask teammates.
+- **Workflow:** Run all `[Local]` scenarios first (`pnpm db:reset && pnpm dev`). Then `[Production]` scenarios after deploy.
+- **Local testing:** Run `pnpm db:reset` first, then test against `localhost:*` URLs with Clerk dev instance.
+- **Production testing:** Run against `*.alternatif.space` URLs. Requires Clerk prod, all subdomains deployed, Resend configured.
+- **Multi-user scenarios (SC-F2–F5):** Requires 5+ accounts reacting. Test in production or seed local DB with extra users.
+- **SC-A1 (email verification):** Production only — Clerk dev doesn't send real emails. Skip locally; test during prod run.
 - **Muted member (T-15):** Update `party_members.status = 'muted'` via SQL to test flagless rendering.
 - **Analytics views (10.1–10.7):** Query from Supabase SQL Editor → `SELECT * FROM analytics_*`.
