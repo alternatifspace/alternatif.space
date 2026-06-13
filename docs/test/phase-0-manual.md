@@ -723,3 +723,23 @@ Run before every deploy. ~5 minutes local, ~3 minutes production.
 - **SC-A1 (email verification):** Production only — Clerk dev doesn't send real emails. Skip locally; test during prod run.
 - **Muted member (T-15):** Update `party_members.status = 'muted'` via SQL to test flagless rendering.
 - **Analytics views (10.1–10.7):** Query from Supabase SQL Editor → `SELECT * FROM analytics_*`.
+
+### Email strategy (production testing)
+
+Use Gmail plus-aliases — they go to the same inbox, Clerk sees distinct addresses:
+
+| Alias | Use for |
+|-------|---------|
+| `alternatifspace+admin@gmail.com` | Admin |
+| `alternatifspace+leader1@gmail.com` | Party leader |
+| `alternatifspace+member1@gmail.com` | Party member |
+| `alternatifspace+anon1@gmail.com` | Non-member |
+| `alternatifspace+new1@gmail.com` | New user (<48h) |
+
+All verification emails land in `alternatifspace@gmail.com`. No fake-mail service needed.
+
+### Cleaning up production data
+
+Run `supabase/snippets/cleanup-test-data.sql` in Supabase SQL Editor. Purges all tables in correct order. Keeps `alternatifspace@gmail.com` admin account.
+
+After SQL cleanup, delete test Clerk users at: [dashboard.clerk.com → Users](https://dashboard.clerk.com)
