@@ -8,12 +8,17 @@ import type { RequestEvent } from '@sveltejs/kit';
 export async function loadThreads(event: RequestEvent): Promise<ThreadListItem[]> {
 	const db = supabaseServer(event);
 
-	const { data: threads } = await db
+	const { data: threads, error: threadsError } = await db
 		.from('mufakat_threads')
 		.select('id, slug, title, status, community_raised, created_at, op_id, op_party_id')
 		.eq('hidden', false)
 		.order('created_at', { ascending: false })
 		.limit(50);
+
+	if (threadsError) {
+		console.error('mufakat feed: threads query failed', threadsError);
+		return [];
+	}
 
 	const threadIds = (threads ?? []).map((t) => t.id);
 	const partyIds = [...new Set((threads ?? []).map((t) => t.op_party_id).filter(Boolean))];
