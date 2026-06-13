@@ -17,6 +17,12 @@ importers:
       '@alternatif/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@fontsource-variable/space-grotesk':
+        specifier: ^5.2.4
+        version: 5.2.10
+      '@fontsource/archivo-black':
+        specifier: ^5.2.4
+        version: 5.2.8
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.108.1
@@ -72,6 +78,12 @@ importers:
       '@alternatif/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@fontsource-variable/space-grotesk':
+        specifier: ^5.2.4
+        version: 5.2.10
+      '@fontsource/archivo-black':
+        specifier: ^5.2.4
+        version: 5.2.8
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.108.1

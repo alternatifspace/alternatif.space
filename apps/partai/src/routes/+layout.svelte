@@ -1,10 +1,17 @@
 <script lang="ts">
-	import { navigating } from '$app/state';
+	import { navigating, page } from '$app/state';
 	import { ClerkProvider, UserButton } from 'svelte-clerk';
 	import { currentUser, currentParty, PartyBadge } from '@alternatif/ui';
 	import '../app.css';
 
 	let { data, children } = $props();
+
+	// The signed-out landing surfaces (/, /cara-kerja) carry their own Pamflet
+	// header, so the plain app chrome is hidden there to keep one visual system
+	// (TRD v1.5 addendum §5). Signed-in users always get the app header.
+	const onLanding = $derived(
+		!data.signedIn && (page.url.pathname === '/' || page.url.pathname === '/cara-kerja')
+	);
 
 	// Offline indicator (9.7): the service worker serves cached pages; the
 	// banner tells the user why content may be stale.
@@ -45,6 +52,7 @@
 			Sedang offline — menampilkan konten tersimpan.
 		</div>
 	{/if}
+	{#if !onLanding}
 	<header class="border-b border-gray-200 bg-white">
 		<nav class="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
 			<a href="/" class="text-lg font-bold tracking-tight">partai<span class="text-gray-400">.alternatif.space</span></a>
@@ -71,6 +79,7 @@
 			</div>
 		</nav>
 	</header>
+	{/if}
 	{@render children()}
 </ClerkProvider>
 

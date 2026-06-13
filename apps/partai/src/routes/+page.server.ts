@@ -1,49 +1,22 @@
-import { supabaseServer } from '$lib/supabase';
-import type { PartyCardData } from '$lib/types';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-// Browse parties (P0-03): default sort by recent leader activity; filters by
-// membership model + activity status; name search; dissolved hidden unless
-// toggled. pending_review parties are never listed (TRD §15).
+// partai root (TRD v1.5 addendum §2):
+//   signed-out  → landing (this page renders it)
+//   signed-in   → the selected party's home. In Phase 0 there is no /dashboard
+//                 yet, so we route to the party's public profile as the stand-in
+//                 (swap the target to /dashboard when Phase 1 ships).
+//   signed-in, no party → /jelajah to find one. (A user with no users-row is
+//                 already redirected to /onboarding by +layout.server.ts.)
+// The signed-in branch is a redirect, not a render, so crawlers hitting / get
+// the indexable landing HTML.
 export const load: PageServerLoad = async (event) => {
-	const { url } = event;
-	const model = url.searchParams.get('model'); // open | application | invite_only
-	const status = url.searchParams.get('status'); // active | dormant
-	const q = url.searchParams.get('q')?.trim() ?? '';
-	const showDissolved = url.searchParams.get('dibubarkan') === '1';
+	const { signedIn, membership } = await event.parent();
 
-	const db = supabaseServer(event);
-	let query = db
-		.from('parties')
-		.select(
-			'id, slug, name, tagline, logo_url, status, governance_config, leader_last_active_at, party_members(count)'
-		)
-		.order('leader_last_active_at', { ascending: false })
-		.limit(60);
-
-	if (status === 'active' || status === 'dormant') {
-		query = query.eq('status', status);
-	} else {
-		query = showDissolved
-			? query.in('status', ['active', 'dormant', 'dissolved'])
-			: query.in('status', ['active', 'dormant']);
+	if (signedIn) {
+		if (membership) redirect(303, `/partai/${membership.party.slug}`);
+		redirect(303, '/jelajah');
 	}
-	if (model) query = query.eq('governance_config->>membership_model', model);
-	if (q) query = query.ilike('name', `%${q}%`);
 
-	const { data } = await query;
-
-	const parties: PartyCardData[] = (data ?? []).map((p) => ({
-		id: p.id,
-		slug: p.slug,
-		name: p.name,
-		tagline: p.tagline,
-		logo_url: p.logo_url,
-		status: p.status,
-		governance_config: p.governance_config,
-		leader_last_active_at: p.leader_last_active_at,
-		member_count: (p.party_members as unknown as Array<{ count: number }>)[0]?.count ?? 0
-	}));
-
-	return { parties, filters: { model, status, q, showDissolved } };
+	return {};
 };
