@@ -4,7 +4,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { ClerkProvider } from 'svelte-clerk';
 	import { currentUser, currentParty, NotificationBell } from '@alternatif/ui';
-	import { PARTAI_URL, partaiProfile } from '$lib/links';
+	import { PARTAI_URL, partaiProfile, WWW_URL } from '$lib/links';
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
 	import '@alternatif/ui/landing.css';
@@ -93,6 +93,7 @@
 				<div class="ml-auto hidden items-center gap-3 md:flex">
 					<a href="/jelajah" class="lp-link text-sm font-medium">Jelajah</a>
 					<a href={PARTAI_URL} class="lp-link text-sm font-medium">Partai</a>
+					<a href="{WWW_URL}/kontak" class="lp-link text-sm font-medium">Kontak</a>
 					{#if data.isAdmin}
 						<a href="/moderasi" class="lp-link text-sm font-medium">Moderasi</a>
 					{/if}
@@ -132,6 +133,7 @@
 				<nav class="mt-6 flex flex-col">
 					<a href="/jelajah" class="lp-link flex min-h-11 items-center text-sm font-medium">Jelajah diskusi</a>
 					<a href={PARTAI_URL} class="lp-link flex min-h-11 items-center text-sm font-medium">Partai</a>
+					<a href="{WWW_URL}/kontak" class="lp-link flex min-h-11 items-center text-sm font-medium">Kontak</a>
 					{#if data.isAdmin}
 						<a href="/moderasi" class="lp-link flex min-h-11 items-center text-sm font-medium">Moderasi</a>
 					{/if}

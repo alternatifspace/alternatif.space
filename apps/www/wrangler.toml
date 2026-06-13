@@ -6,6 +6,7 @@ pages_build_output_dir = ".svelte-kit/cloudflare"
 compatibility_date = "2026-06-11"
 compatibility_flags = ["nodejs_compat"]
 
-# Public values only — www has no Supabase dependency and no secrets (PRD §7).
+# Public values + secrets stored via Cloudflare Pages dashboard / wrangler pages secret put.
+# RESEND_API_KEY is set as a Pages secret for the /api/contact endpoint.
 [vars]
 PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsuYWx0ZXJuYXRpZi5zcGFjZSQ"

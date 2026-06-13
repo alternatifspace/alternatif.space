@@ -442,7 +442,7 @@
 				&nbsp;/&nbsp;
 				<span class="opacity-50">perpus</span>
 			</span>
-			<span class="opacity-50">github · /contribute</span>
+			<span>github · <a href="/contribute" class="lp-link">/contribute</a> · <a href="/kontak" class="lp-link">/kontak</a></span>
 		</div>
 	</footer>
 </div>

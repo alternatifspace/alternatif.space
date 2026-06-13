@@ -217,7 +217,8 @@
 				<span class="font-bold">mufakat.alternatif.space</span>
 				<span>
 					<a href="https://alternatif.space" class="lp-link">alternatif.space</a> /
-					<a href="/jelajah" class="lp-link">diskusi</a>
+					<a href="/jelajah" class="lp-link">diskusi</a> /
+					<a href="https://alternatif.space/kontak" class="lp-link">kontak</a>
 				</span>
 				<span class="opacity-50">id • 2026</span>
 			</div>

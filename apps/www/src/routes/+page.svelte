@@ -292,7 +292,8 @@
 					{#if segera}<span class="opacity-50">{name}</span>{:else}<a href={url} class="lp-link">{name}</a>{/if}
 				{/each}
 			</span>
-			<a href="/contribute" class="lp-link">kontribusi</a>
+			<a href="/contribute" class="lp-link">kontribusi</a> /
+			<a href="/kontak" class="lp-link">kontak</a>
 		</div>
 	</footer>
 </div>

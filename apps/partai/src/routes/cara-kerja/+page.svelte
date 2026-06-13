@@ -206,7 +206,7 @@
 	<footer class="border-t-2" style="border-color: var(--lp-ink)">
 		<div class="lp-mono flex flex-wrap items-baseline justify-between gap-3 px-5 py-8 text-xs tracking-[0.2em] uppercase sm:px-10">
 			<span class="font-bold">partai.alternatif.space</span>
-			<span><a href="/" class="lp-link">beranda</a> / <a href="/jelajah" class="lp-link">jelajah</a></span>
+			<span><a href="/" class="lp-link">beranda</a> / <a href="/jelajah" class="lp-link">jelajah</a> / <a href="https://alternatif.space/kontak" class="lp-link">kontak</a></span>
 			<span class="opacity-50">id • 2026</span>
 		</div>
 	</footer>

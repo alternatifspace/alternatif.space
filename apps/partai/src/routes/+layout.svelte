@@ -4,7 +4,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { ClerkProvider, UserButton } from 'svelte-clerk';
 	import { currentUser, currentParty, PartyBadge, NotificationBell } from '@alternatif/ui';
-	import { MUFAKAT_URL } from '$lib/links';
+	import { MUFAKAT_URL, WWW_URL } from '$lib/links';
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
 	import '@alternatif/ui/landing.css';
@@ -99,6 +99,7 @@
 				<div class="ml-auto hidden items-center gap-3 md:flex">
 					<a href="/jelajah" class="lp-link text-sm font-medium">Jelajahi</a>
 					<a href={MUFAKAT_URL} class="lp-link text-sm font-medium">Mufakat</a>
+					<a href="{WWW_URL}/kontak" class="lp-link text-sm font-medium">Kontak</a>
 					{#if data.membership}
 						<PartyBadge party={data.membership.party} partaiBaseUrl="" />
 					{:else if data.signedIn}
@@ -141,6 +142,7 @@
 				<nav class="mt-6 flex flex-col">
 					<a href="/jelajah" class="lp-link flex min-h-11 items-center text-sm font-medium">Jelajahi partai</a>
 					<a href={MUFAKAT_URL} class="lp-link flex min-h-11 items-center text-sm font-medium">Mufakat</a>
+					<a href="{WWW_URL}/kontak" class="lp-link flex min-h-11 items-center text-sm font-medium">Kontak</a>
 					{#if data.membership}
 						<a href="/partai/{data.membership.party.slug}" class="lp-link flex min-h-11 items-center text-sm font-medium">Partaiku</a>
 					{:else if data.signedIn}

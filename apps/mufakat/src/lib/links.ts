@@ -2,6 +2,7 @@
 import { dev } from '$app/environment';
 
 export const PARTAI_URL = dev ? 'http://localhost:5173' : 'https://partai.alternatif.space';
+export const WWW_URL = dev ? 'http://localhost:5175' : 'https://alternatif.space';
 
 export const partaiProfile = (userId: string) => `${PARTAI_URL}/profil/${userId}`;
 export const partaiParty = (slug: string) => `${PARTAI_URL}/partai/${slug}`;
