@@ -4,6 +4,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { ClerkProvider } from 'svelte-clerk';
 	import { currentUser, currentParty, NotificationBell } from '@alternatif/ui';
+	import AuthSync from '$lib/components/AuthSync.svelte';
 	import { PARTAI_URL, partaiProfile, WWW_URL } from '$lib/links';
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
@@ -64,6 +65,7 @@
 {/if}
 
 <ClerkProvider>
+	<AuthSync signedIn={data.signedIn} />
 	<div class="lp min-h-screen">
 		{#if offline}
 			<div class="bg-amber-100 py-1.5 text-center text-sm text-amber-900">

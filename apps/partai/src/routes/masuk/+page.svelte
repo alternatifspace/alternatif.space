@@ -1,23 +1,21 @@
 <script lang="ts">
-	import { SignIn } from 'svelte-clerk';
+	import { SignIn, useClerkContext } from 'svelte-clerk';
 	import '@fontsource/archivo-black';
 	import '@fontsource-variable/space-grotesk';
 	import '@alternatif/ui/landing.css';
+
+	// Once Clerk authenticates, the <SignIn> widget unmounts and a redirect
+	// follows — a beat that otherwise shows a blank page (SC-A4). Cover the gap
+	// with an explicit "mengalihkan" state so the user knows it's working.
+	const ctx = useClerkContext();
+	const redirecting = $derived(Boolean(ctx.auth.userId));
 </script>
 
 <svelte:head>
 	<title>Masuk — alternatif.space</title>
 </svelte:head>
 
-<div class="lp min-h-screen flex flex-col px-5 pt-6 pb-8 sm:px-10">
-	<div
-		class="lp-mono flex items-center justify-between border-b-2 pb-3 text-xs tracking-[0.2em] uppercase"
-		style="border-color: var(--lp-ink)"
-	>
-		<a href="/" class="font-bold">partai.alternatif.space</a>
-		<a href="/daftar" class="lp-link">Daftar</a>
-	</div>
-
+<div class="lp flex min-h-screen flex-col px-5 pt-6 pb-8 sm:px-10">
 	<div class="my-auto flex flex-col items-center py-12">
 		<div class="w-full max-w-md text-center">
 			<p class="lp-mono text-sm tracking-[0.18em] uppercase opacity-60">
@@ -26,10 +24,18 @@
 			<h1 class="lp-display-sm mt-4">Masuk, lanjut latihan.</h1>
 		</div>
 
-		<div class="w-full max-w-md mt-8">
-			<!-- Email + password only (P0-01) — social providers disabled in the Clerk
-			     dashboard, not here. -->
-			<SignIn signUpUrl="/daftar" />
+		<div class="mt-8 w-full max-w-md">
+			{#if redirecting}
+				<!-- Auth succeeded; the redirect is in flight (SC-A4). -->
+				<div class="flex flex-col items-center gap-4 py-12 text-center" role="status">
+					<div class="lp-spinner" aria-hidden="true"></div>
+					<p class="lp-mono text-sm tracking-[0.18em] uppercase opacity-70">Mengalihkan…</p>
+				</div>
+			{:else}
+				<!-- Email + password only (P0-01) — social providers disabled in the Clerk
+				     dashboard, not here. -->
+				<SignIn signUpUrl="/daftar" />
+			{/if}
 		</div>
 	</div>
 
@@ -40,3 +46,19 @@
 		</div>
 	</footer>
 </div>
+
+<style>
+	.lp-spinner {
+		width: 2rem;
+		height: 2rem;
+		border: 3px solid color-mix(in srgb, var(--lp-ink) 20%, transparent);
+		border-top-color: var(--lp-amber);
+		border-radius: 50%;
+		animation: lp-spin 0.7s linear infinite;
+	}
+	@keyframes lp-spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+</style>

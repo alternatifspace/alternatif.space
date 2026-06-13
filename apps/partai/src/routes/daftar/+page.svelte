@@ -9,15 +9,7 @@
 	<title>Daftar — alternatif.space</title>
 </svelte:head>
 
-<div class="lp min-h-screen flex flex-col px-5 pt-6 pb-8 sm:px-10">
-	<div
-		class="lp-mono flex items-center justify-between border-b-2 pb-3 text-xs tracking-[0.2em] uppercase"
-		style="border-color: var(--lp-ink)"
-	>
-		<a href="/" class="font-bold">partai.alternatif.space</a>
-		<a href="/masuk" class="lp-link">Masuk</a>
-	</div>
-
+<div class="lp flex min-h-screen flex-col px-5 pt-6 pb-8 sm:px-10">
 	<div class="my-auto flex flex-col items-center py-12">
 		<div class="w-full max-w-md text-center">
 			<p class="lp-mono text-sm tracking-[0.18em] uppercase opacity-60">

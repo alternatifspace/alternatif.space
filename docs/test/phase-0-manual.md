@@ -71,7 +71,7 @@ Run `pnpm db:reset` before starting. Confirms:
   **Covers:** P0-01, W0-01, W0-06  
   **Steps:**
   1. Visit `alternatif.space` — confirm landing renders with "Demokrasi itu otot." headline
-  2. Click "Mulai Latihan" → lands on `/daftar`
+  2. Register: **desktop** shows the inline Clerk sign-up form in the hero (no "Mulai Latihan" button — registration happens in place); **mobile** shows a "Mulai Latihan" button → `/daftar`
   3. Fill email + password → submit sign-up
   4. Complete email verification (check inbox)
   **Expected:** After verification, redirected to `/onboarding` on partai subdomain.

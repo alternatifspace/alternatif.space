@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { supabaseServer } from '$lib/supabase';
 import type { PageServerLoad } from './$types';
@@ -40,15 +40,16 @@ export const load: PageServerLoad = async (event) => {
 		.maybeSingle();
 	if (!party) error(404, 'Partai tidak ditemukan');
 
-	// Sharing a party under review or dissolved makes no sense.
-	if (party.status === 'pending_review' || party.status === 'dissolved') {
-		redirect(303, `/partai/${party.slug}`);
-	}
+	// Sharing a party under review or dissolved makes no sense — but bouncing
+	// silently to the party page confused testers (a freshly created party is
+	// pending_review). Render the share page in a "not yet shareable" state so
+	// the reason is explicit (P0-13).
+	const shareable = party.status !== 'pending_review' && party.status !== 'dissolved';
 
 	// Lazy generation (5.40): first visit composes and stores the OG card.
-	if (!party.share_card_url) {
+	if (shareable && !party.share_card_url) {
 		party.share_card_url = await ensureShareCard(party.slug);
 	}
 
-	return { party, isMember: membership?.party_id === party.id };
+	return { party, shareable, isMember: membership?.party_id === party.id };
 };
