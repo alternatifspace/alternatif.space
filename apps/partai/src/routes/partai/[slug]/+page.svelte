@@ -49,12 +49,22 @@
 <svelte:head>
 	<!-- OG meta per party (P0-13, 5.19); og:image is the pre-composed share card -->
 	<title>{party.name} — partai.alternatif.space</title>
+	<meta name="description" content={party.tagline ?? 'Partai di alternatif.space'} />
+	<link rel="canonical" href="https://partai.alternatif.space/partai/{party.slug}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://partai.alternatif.space/partai/{party.slug}" />
 	<meta property="og:title" content={party.name} />
 	<meta property="og:description" content={party.tagline ?? 'Partai di alternatif.space'} />
 	{#if party.share_card_url}
 		<meta property="og:image" content={party.share_card_url} />
 	{/if}
-	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="id_ID" />
+	<meta name="twitter:card" content={party.share_card_url ? 'summary_large_image' : 'summary'} />
+	<meta name="twitter:title" content={party.name} />
+	<meta name="twitter:description" content={party.tagline ?? 'Partai di alternatif.space'} />
+	{#if party.share_card_url}
+		<meta name="twitter:image" content={party.share_card_url} />
+	{/if}
 </svelte:head>
 
 <div class="mx-auto max-w-5xl px-5 py-10">

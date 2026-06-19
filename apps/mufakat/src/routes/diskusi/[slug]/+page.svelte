@@ -62,6 +62,18 @@
 
 <svelte:head>
 	<title>{thread.hidden ? '[disembunyikan moderator]' : thread.title} — mufakat.alternatif.space</title>
+	{#if !thread.hidden}
+		<meta name="description" content={thread.title} />
+		<link rel="canonical" href="https://mufakat.alternatif.space/diskusi/{thread.slug}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content="https://mufakat.alternatif.space/diskusi/{thread.slug}" />
+		<meta property="og:title" content="{thread.title} — mufakat.alternatif.space" />
+		<meta property="og:description" content={thread.title} />
+		<meta property="og:locale" content="id_ID" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="{thread.title} — mufakat.alternatif.space" />
+		<meta name="twitter:description" content={thread.title} />
+	{/if}
 </svelte:head>
 
 <main class="mx-auto max-w-3xl px-5 py-10 pb-16">
