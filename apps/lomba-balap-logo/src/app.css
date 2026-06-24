@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+/* Fonts (design system): Instrument Serif for display, DM Sans for body/UI. */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource-variable/dm-sans';
+
+/* Locked palette — dark ink-and-amber (project design system). Defined locally
+   because this is a deliberately decoupled side project, not wired to
+   @alternatif/ui. */
+@theme {
+	--color-ink: #1a1714;
+	--color-amber: #f5a623;
+	--color-paper: #fdfaf5;
+	--color-paper-warm: #f7f2e8;
+	--color-border-warm: #e8e2d8;
+	--color-error: #d94f3d;
+	--color-success: #3d8b5e;
+
+	--font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+	--font-sans: 'DM Sans Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Mobile-first baseline (design system §): 320px baseline, 16px base font. */
+html {
+	font-size: 16px;
+}
+
+body {
+	font-family: var(--font-sans);
+	background-color: var(--color-paper);
+	color: var(--color-ink);
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-display);
+	font-weight: 400;
+	line-height: 1.1;
+}
+
+/* 44x44px minimum touch targets (design system §). */
+a,
+button {
+	touch-action: manipulation;
+}

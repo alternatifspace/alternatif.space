@@ -1,0 +1,21 @@
+# Cloudflare Pages config for lomba-balap-logo.alternatif.space (TRD §1, §6).
+# Standalone side project: its OWN Supabase project + its OWN R2 bucket,
+# decoupled from partai/mufakat. nodejs_compat is required for @supabase/ssr.
+name = "lomba-balap-logo"
+pages_build_output_dir = ".svelte-kit/cloudflare"
+compatibility_date = "2026-06-11"
+compatibility_flags = ["nodejs_compat"]
+
+# Public values only. Secrets (SUPABASE_SERVICE_ROLE_KEY, TURNSTILE_SECRET_KEY)
+# are set as Cloudflare Pages Secrets in the dashboard, never here (TRD §10).
+[vars]
+PUBLIC_SUPABASE_URL = "https://zuayjojbmzdyyhbktiom.supabase.co"
+PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_HneoWbkLm4fyfVrit4lzaQ_8n2R2U1U"
+PUBLIC_R2_PUBLIC_HOST = "img.lomba-balap-logo.alternatif.space"
+PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADqXGv97C2xh-Sdy"
+
+# R2 binding for image writes (TRD §6). Reads go through the public custom
+# domain above, not this binding.
+[[r2_buckets]]
+binding = "LBL_LOGOS"
+bucket_name = "lomba-balap-logo"

@@ -9,6 +9,7 @@
 		"dev:mufakat": "pnpm --filter mufakat dev",
 		"dev:www": "pnpm --filter www dev",
 		"dev:admin": "pnpm --filter admin dev",
+		"dev:lbl": "pnpm --filter lomba-balap-logo dev",
     "build": "pnpm -r build",
     "check": "pnpm -r check",
     "db:reset": "supabase db reset",
