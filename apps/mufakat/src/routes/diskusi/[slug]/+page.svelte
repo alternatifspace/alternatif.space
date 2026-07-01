@@ -295,7 +295,7 @@
 			{/each}
 
 			{#if data.roots.length === 0}
-				<p class="text-sm opacity-60">Belum ada komentar — jadilah yang pertama menanggapi.</p>
+				<p class="text-sm opacity-60">Belum ada komentar — jadi yang pertama nanggapi.</p>
 			{/if}
 
 			{#each data.roots as node (node.id)}

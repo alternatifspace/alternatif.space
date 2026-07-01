@@ -51,7 +51,7 @@
 	const jaga = [
 		[
 			'Jangan bersihin gesekannya',
-			'Platform yang kebanyakan ngejar aman dan tenang bakal buang yang paling berharga: ketegangan produktif. Mekanisme split di mufakat — ngasih beda ruang sendiri, bukan meredam — ekspresi langsung dari jiwa ini.',
+			'Produk yang kebanyakan ngejar aman dan tenang bakal buang yang paling berharga: ketegangan produktif. Mekanisme split di mufakat — ngasih beda ruang sendiri, bukan meredam — ekspresi langsung dari jiwa ini.',
 			'GESEKAN'
 		],
 		[
@@ -156,8 +156,8 @@
 		<div class="mt-8 grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
 			<p class="max-w-xl text-lg leading-relaxed font-medium">
 				Kamu tahu apa yang kamu percaya sebagian besar karena pernah berhadapan sama orang yang
-				percaya hal beda. Pengetahuan, nilai, identitas — semua produk kolektif. Tapi platform
-				digital malah bangun isolasi: algoritma nyortir kamu ke gelembung, feed cuma nampilin yang
+				percaya hal beda. Pengetahuan, nilai, identitas — semua produk kolektif. Tapi media
+				sosial malah bangun isolasi: algoritma nyortir kamu ke gelembung, feed cuma nampilin yang
 				udah kamu setujui. Hasilnya, jutaan orang merasa sendirian secara politik — punya pandangan,
 				tapi nggak punya ruang buat bawanya ke hadapan pandangan lain. Alternatif Space mulai dari
 				penolakan terhadap isolasi itu.
@@ -204,7 +204,7 @@
 		</h2>
 		<div class="mt-8 grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
 			<p class="max-w-xl text-lg leading-relaxed font-medium">
-				Begitu orang ngumpul, mereka bakal beda — nggak terhindarkan. Platform lain mandang beda
+				Begitu orang ngumpul, mereka bakal beda — nggak terhindarkan. Aplikasi lain mandang beda
 				sebagai masalah yang perlu dikelola: ditengahi, diredam, dipisah biar nggak meledak.
 				Hasilnya diskusi steril, atau konflik yang nggak produktif. Di sini, beda itu bahan baku. Ia
 				bukti orang sungguh-sungguh percaya pada sesuatu, dan tempat pengetahuan baru lahir — bukan

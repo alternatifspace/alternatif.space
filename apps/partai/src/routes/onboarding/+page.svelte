@@ -42,7 +42,7 @@
 					maxlength="60"
 					class="mt-2 block w-full border-b-2 bg-transparent px-0 py-3 text-base outline-none"
 					style="border-color: var(--lp-ink)"
-					placeholder="Nama yang tampil di seluruh platform"
+					placeholder="Nama yang tampil di semua ruang"
 				/>
 			</label>
 

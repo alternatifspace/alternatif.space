@@ -30,7 +30,7 @@
 			statusClass: 'lp-stamp-amber',
 			gridCol: '2 / span 2',
 			description:
-				'Landasan: partai dibentuk, mufakat dibuka. Platform pertama kali hadir sebagai ruang latihan demokrasi.',
+				'Landasan: partai dibentuk, mufakat dibuka. Untuk pertama kali, ada ruang latihan demokrasi.',
 			workstreams: [
 				{
 					label: 'Partai',
@@ -275,7 +275,7 @@
 		</p>
 		<h2 class="lp-display-sm mt-4 max-w-2xl">Satu langkah, satu fase.</h2>
 		<p class="mt-3 max-w-xl leading-relaxed opacity-80">
-			Tiga fase dari peluncuran sampai platform bisa memetakan perbedaan secara mandiri. Tiap fase
+			Tiga fase dari peluncuran sampai ruang ini bisa memetakan perbedaan secara mandiri. Tiap fase
 			terbangun di atas fase sebelumnya — nggak lompat.
 		</p>
 

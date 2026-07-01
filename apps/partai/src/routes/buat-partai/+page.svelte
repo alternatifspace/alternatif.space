@@ -214,12 +214,12 @@
 
 			{#if draft.archetype === 'custom'}
 				<section class="rounded-lg border border-gray-200 p-4">
-					<h2 class="mb-4 font-semibold">Atur parameter tata kelola</h2>
+					<h2 class="mb-4 font-semibold">Setel aturan mainnya</h2>
 					{@render governanceParams()}
 				</section>
 			{:else if draft.archetype}
 				<details class="rounded-lg border border-gray-200 p-4">
-					<summary class="cursor-pointer font-semibold">Lihat & sesuaikan parameter tata kelola</summary>
+					<summary class="cursor-pointer font-semibold">Lihat & sesuaikan aturan mainnya</summary>
 					<div class="mt-4">
 						{@render governanceParams()}
 					</div>
@@ -228,9 +228,9 @@
 
 			{#if draft.archetype}
 				<p class="rounded-md bg-amber-50 p-3 text-sm text-amber-900">
-					Konfigurasi ini <strong>terkunci permanen</strong> begitu partai terbit — pilih dengan
-					sadar. Masa honeymoon 3 bulan berjalan setelah terbit; selama itu recall ketua belum
-					dapat dimulai.
+					Aturan main ini <strong>terkunci permanen</strong> begitu partai terbit — pilih dengan
+					sadar. Masa honeymoon 3 bulan jalan setelah terbit; selama itu recall ketua belum
+					bisa dimulai.
 				</p>
 			{/if}
 
@@ -310,7 +310,7 @@
 				<span>
 					<span class="font-medium">Aktifkan dewan</span>
 					<span class="mt-1 block text-sm text-gray-600">
-						Opsional. Jika aktif, pembuatan peran dewan tersedia setelah terbit (dieksekusi di Fase 2).
+						Opsional. Kalau aktif, pengaturan peran dewan menyusul setelah partai terbit.
 					</span>
 				</span>
 			</label>
@@ -352,8 +352,8 @@
 			</section>
 
 			<div class="rounded-md bg-amber-50 p-3 text-sm text-amber-900">
-				Setelah terbit, <strong>konfigurasi tata kelola terkunci permanen</strong> dan masa honeymoon
-				3 bulan dimulai. Partai akan ditinjau moderator sebelum tampil publik (target 24 jam).
+				Setelah terbit, <strong>aturan main terkunci permanen</strong> dan masa honeymoon
+				3 bulan dimulai. Sebelum tampil publik, partai kamu ditinjau moderator dulu (target 24 jam).
 			</div>
 
 			{#if form?.error}<p class="text-sm text-red-600">{form.error}</p>{/if}

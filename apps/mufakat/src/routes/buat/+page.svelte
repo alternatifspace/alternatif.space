@@ -108,7 +108,7 @@
 				maxlength={200}
 				bind:value={title}
 				oninput={onTitleInput}
-				placeholder="Pertanyaan atau topik yang ingin kamu angkat"
+				placeholder="Pertanyaan atau topik yang mau kamu angkat"
 				class="mt-1 min-h-11 w-full border-2 bg-transparent px-3 text-base focus:outline-none"
 				style="border-color: var(--lp-ink)"
 			/>
@@ -136,7 +136,7 @@
 					{/each}
 				</ul>
 				<p class="mt-2 text-xs opacity-70">
-					Kalau pertanyaanmu memang berbeda, lanjutkan saja — kamu tetap bisa membuat diskusi baru.
+					Kalau pertanyaanmu memang beda, lanjut aja — kamu tetap bisa bikin diskusi baru.
 				</p>
 			</div>
 		{/if}
@@ -165,9 +165,9 @@
 				{#if form.explanation}
 					{form.explanation}
 				{:else if form.error === 'party_membership_required'}
-					Kamu perlu bergabung dengan partai untuk membuka diskusi.
+					Kamu perlu gabung partai dulu buat buka diskusi.
 				{:else}
-					Gagal membuat diskusi. Coba lagi.
+					Gagal bikin diskusi. Coba lagi.
 				{/if}
 			</div>
 		{/if}

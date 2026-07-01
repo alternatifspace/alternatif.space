@@ -20,7 +20,7 @@
 		<h1 class="lp-display-sm max-w-md">
 			Kamu sekarang anggota {data.joinedParty.name}.
 		</h1>
-		<p class="max-w-md opacity-70">Bendera partaimu sekarang terlihat di seluruh platform.</p>
+		<p class="max-w-md opacity-70">Bendera partaimu sekarang terlihat di semua ruang.</p>
 		<button type="button" class="lp-btn inline-block" onclick={() => (stage = 'nudge')}>
 			Lanjut
 		</button>
